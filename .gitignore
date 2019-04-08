@@ -1,0 +1,10 @@
+*.gch
+*.o
+*.x
+*~
+*.out
+/cmake-build-debug
+.vscode
+.DS_Store
+CMakeLists.txt
+
