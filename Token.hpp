@@ -105,6 +105,8 @@ public:
     bool isNot()    const { return _keyword == "not";   }
     bool isIn()     const { return _keyword == "in";    }
     bool isRange()  const { return _keyword == "range"; }
+    bool isFunc()   const { return _keyword == "def";   }
+    bool isLen()    const { return _keyword == "len";   }
 
     bool isFloat()  const  { return _isFloat; }
     float getFloat() const { return _float; }

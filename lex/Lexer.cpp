@@ -17,7 +17,7 @@ static inline bool isEqualityOperator(char c) { return c == '=' || c == '!' || c
 static inline bool isKeyword(std::string s) {
     return (s == "for" || s == "print" || s == "if" || s == "else" || s == "elif" ||
             s == "def" || s == "and" || s == "or" || s == "while" || s == "not" || s == "in" ||
-            s == "range");
+            s == "range" || s == "len" || s == "def" );
 }
 
 inline int Lexer::spacesConsumedOnLine() {
