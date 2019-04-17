@@ -574,6 +574,27 @@ std::unique_ptr<ExprNode> Parser::term() {
     return left;
 }
 
+std::unique_ptr<ExprNode> Parser::call(std::shared_ptr<Token> ID) {
+
+    std::string scope = "Parser::call()";
+    auto tok = lexer.getToken();
+
+    if ( !tok->isOpenParen() ) {
+        die(scope, "Expected (", tok);
+    }
+
+    std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> tlist = testlist();
+
+    tok = lexer.getToken();
+
+    if ( !tok->isCloseParen() ) {
+        die(scope, "Expected )", tok);
+    }
+
+    return std::make_unique<FunctionCall>(ID, std::move(tlist));
+
+}
+
 std::unique_ptr<ExprNode> Parser::factor() {
     // This function parses the grammar rules:
 
@@ -600,7 +621,22 @@ std::unique_ptr<ExprNode> Parser::factor() {
         if (debug)
             std::cout << scope << " return" << std::endl;
 
-        return atom();
+        auto left = atom();
+
+        if ( left->token()->isName() ) {
+            if ( lexer.getToken()->isOpenParen() ) {
+                //function
+                lexer.ungetToken();
+                return call( left->token() );
+            } else {
+                lexer.ungetToken();
+            }           
+
+        }
+
+        return left;
+
+        
     }
     die("Parser::factor", "ERROR", tok);
     return nullptr;

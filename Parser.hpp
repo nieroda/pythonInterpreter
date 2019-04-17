@@ -7,7 +7,7 @@
 #include "statements/Statement.hpp"
 #include "lex/Lexer.hpp"
 #include "ArithExpr.hpp"
-
+#include "FunctionMap.hpp"
 class Parser { 
     public:
 
@@ -34,6 +34,7 @@ class Parser {
 
         std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> testlist();
 
+
         std::unique_ptr<ExprNode> test();
         std::unique_ptr<ExprNode> or_test();
         std::unique_ptr<ExprNode> and_test();
@@ -44,10 +45,15 @@ class Parser {
         std::unique_ptr<ExprNode> term();
         
         std::unique_ptr<ExprNode> factor();
+
+        std::unique_ptr<ExprNode> call(std::shared_ptr<Token>);
+
         std::unique_ptr<ExprNode> atom();
 
     private:
         Lexer &lexer;
+        std::shared_ptr<FunctionMap> _functionMap;
+
 };
 
 #endif
