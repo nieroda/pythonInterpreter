@@ -49,7 +49,8 @@ int main(int argc, char *argv[]) {
     //   std::cout << std::endl;
     // }
     Parser parser(lex);
-    std::unique_ptr<GroupedStatements> stmts =  parser.file_input();
+    // std::unique_ptr<GroupedStatements> stmts =  parser.file_input();
+    auto stmts = parser.file_input();
 
     // stmts->evaluate(symTab);
     // std::cout << "Evaluate Done - Dumping Tree" << std::endl;

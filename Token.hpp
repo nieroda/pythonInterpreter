@@ -77,6 +77,7 @@ public:
                isDivisionOperator();
     }
 
+  
 
     bool isName() const                   { return _name.length() > 0; }
     std::string getName() const                  { return _name; }
@@ -115,6 +116,7 @@ public:
     bool isFunc()   const { return _keyword == "def";   }
     bool isLen()    const { return _keyword == "len";   }
     bool isPeriod() const { return _keyword == ".";     }
+    bool isReturn() const { return _keyword == "return";}
 
     bool isFloat()  const  { return _isFloat; }
     float getFloat() const { return _float; }
