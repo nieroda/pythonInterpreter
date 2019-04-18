@@ -284,11 +284,33 @@ void FunctionDefinition::dumpAST(std::string spaces) {
     std::cout << spaces << "FunctionDef: " << _funcName << " " << this << " ( ";
     for_each(_paramList.begin(), _paramList.end(), [](auto &str) { std::cout << str << " "; });
     std::cout << ")" << std::endl;
-    _SUITE_NOT_FUNC_SUITE_FIX->dumpAST(spaces + '\t');
+
+    if (_SUITE_NOT_FUNC_SUITE_FIX == nullptr ) {
+        std::cout << spaces << "Function std::move() reference removed and moved to function map -- cannot dump" << std::endl;
+    } else {
+        _SUITE_NOT_FUNC_SUITE_FIX->dumpAST(spaces + '\t');
+    }
 }
 
 
 //END FunctionDefinition
+
+//START FUNCTIONCALL
+FunctionCallStatement::FunctionCallStatement(std::unique_ptr<ExprNode> exprNodeCall):
+    _exprNodeCall{std::move(exprNodeCall)}
+{}
+
+void FunctionCallStatement::evaluate(SymTab &symTab) {
+    _exprNodeCall->evaluate(symTab);
+}
+
+void FunctionCallStatement::dumpAST(std::string spaces) {
+    std::cout << spaces << "Function Wrapper: " << this << std::endl;
+    _exprNodeCall->dumpAST(spaces + "\t");
+}
+
+
+//END FUNCTIONCALL
 
 // START "STATEMENTS"
 Statements::Statements() {}

@@ -130,6 +130,16 @@ private:
     std::unique_ptr<Statements> _SUITE_NOT_FUNC_SUITE_FIX;
     bool _hasBeenAddedToSymTab;
 };
+
+class FunctionCallStatement : public Statement {
+public:
+    FunctionCallStatement(std::unique_ptr<ExprNode>);
+    virtual ~FunctionCallStatement() = default;
+    virtual void evaluate(SymTab &symTab);
+    virtual void dumpAST(std::string);
+private:
+    std::unique_ptr<ExprNode> _exprNodeCall;
+};
  
 
 class Comparison {

@@ -70,8 +70,6 @@ std::unique_ptr<Statement> Parser::simple_stmt() {
 
     auto tok = lexer.getToken();
 
-    if ( tok->eol() )
-        std::cout << "hello there" << std::endl;
 
     if ( !(tok->isPrint() || tok->isName() || tok->isReturn()) ) {
         die(scope, "violating rule", tok);
@@ -101,9 +99,13 @@ std::unique_ptr<Statement> Parser::simple_stmt() {
             return assignStmt;
         } 
         else if (tok->isOpenParen()) {
-            // std::unique_ptr<Stmt> callStmt = call(cachedToken);
-            // getEOF(scope);
-            // return callStmt;
+            lexer.ungetToken();
+            std::unique_ptr<FunctionCallStatement> callStmt = 
+                std::make_unique<FunctionCallStatement> (
+                    call(cachedToken)
+                );
+            getEOL(scope);
+            return callStmt;
         } else {
             die(scope, "Unidentified -> 1 <-", tok);
         } // Remember to add else if(tok->isPerioid()) // array operator
@@ -450,9 +452,18 @@ std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> Parser::testlist() {
     std::string scope = "Parser::testlist()"; 
 
     auto p = std::make_unique<std::vector<std::unique_ptr<ExprNode>>>();
-    p->push_back(test());
 
     auto tok = lexer.getToken();
+
+    if ( tok->isCloseParen() ) {
+        lexer.ungetToken();
+        return p;
+    }
+
+    lexer.ungetToken();
+    p->push_back(test());
+
+    tok = lexer.getToken();
 
     while ( tok->isComma() ) {
         p->push_back(test());
@@ -637,7 +648,7 @@ std::unique_ptr<ExprNode> Parser::call(std::shared_ptr<Token> ID) {
     auto tok = lexer.getToken();
 
     if ( !tok->isOpenParen() ) {
-        die(scope, "Expected (", tok);
+        die(scope, "Expected `(`", tok);
     }
 
     std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> tlist = testlist();
@@ -645,7 +656,7 @@ std::unique_ptr<ExprNode> Parser::call(std::shared_ptr<Token> ID) {
     tok = lexer.getToken();
 
     if ( !tok->isCloseParen() ) {
-        die(scope, "Expected )", tok);
+        die(scope, "Expected `)`", tok);
     }
 
     return std::make_unique<FunctionCall>(ID, std::move(tlist));

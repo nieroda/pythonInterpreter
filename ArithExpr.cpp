@@ -341,11 +341,11 @@ std::unique_ptr<TypeDescriptor> FunctionCall::evaluate(SymTab &symTab) {
 
 void FunctionCall::dumpAST(std::string indent) {
 
-    // std::cout << indent << "FunctionCall: " << _functionName << " " << this << "\n";
+    std::cout << indent << "FunctionCall: " << _functionName << " " << this << "\n";
 
-    // for_each(_testList->begin(), _testList->end(), [&] (auto &args) {
-    //     args->dumpAST(indent + "\t");
-    // });
+    for_each(_testList->begin(), _testList->end(), [&] (auto &args) {
+        args->dumpAST(indent + "\t");
+    });
 }
 
 void FunctionCall::print() {}
