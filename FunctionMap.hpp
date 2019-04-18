@@ -1,12 +1,11 @@
 #ifndef __FUNCTION_MAP_HPP
 #define __FUNCTION_MAP_HPP
-#include <string>
 #include <map>
+#include <string>
+// #include "FunctionDefinition.hpp"
 
 class FunctionDefinition {
-public:
-  FunctionDefinition() = default;
-  void dumpAST(std::string f) {}
+    FunctionDefinition() {}
 };
 
 class FunctionMap {
@@ -32,10 +31,10 @@ public:
 
         std::cout << "FuncDEFN START" << std::endl;
 
-        for (auto &item: _table) {
-            item.second->dumpAST(tab);
-            std::cout << "\n\n";
-        }
+        // for (auto &item: _table) {
+        //     item.second->dumpAST(tab);
+        //     std::cout << "\n\n";
+        // }
 
         std::cout << "FuncDEF END\n\n" << std::endl;
 
