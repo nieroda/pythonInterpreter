@@ -37,6 +37,9 @@ class Parser {
         std::unique_ptr<IfStatement> if_stmt();
         std::unique_ptr<RangeStmt> for_stmt();
 
+        std::unique_ptr<Statement> func_def();
+        std::vector<std::string> parameter_list();
+
         std::unique_ptr<Statements> suite();
 
         std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> testlist();

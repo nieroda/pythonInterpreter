@@ -259,6 +259,32 @@ void RangeStmt::editOptionals(int which, std::optional<int> opt) {
 
 
 //START FunctionDefinition
+FunctionDefinition::FunctionDefinition(
+    std::string funcName,
+    std::vector<std::string> paramList,
+    std::unique_ptr<Statements> SUITE_NOT_FUNC_SUITE_FIX):
+    _funcName{funcName},
+    _paramList{paramList},
+    _SUITE_NOT_FUNC_SUITE_FIX{std::move(SUITE_NOT_FUNC_SUITE_FIX)},
+    _hasBeenAddedToSymTab{false}
+{}
+
+void FunctionDefinition::evaluate(SymTab &symTab) {
+    if ( !_hasBeenAddedToSymTab ) {
+    //  symTab.addFunction(std::make_unqiue<FunctionDefinition>(_funcName, _paramList, std::move(_SUITE_NOT_FUNC_SUITE_FIX), true));
+     return;
+    }
+
+    _SUITE_NOT_FUNC_SUITE_FIX->evaluate(symTab);
+}
+
+void FunctionDefinition::dumpAST(std::string spaces) {
+    std::cout << spaces << "FunctionDef: " << _funcName << " " << this << " (";
+    for_each(_paramList.begin(), _paramList.end(), [](auto &str) { std::cout << str << " "; });
+    std::cout << ")" << std::endl;
+    _SUITE_NOT_FUNC_SUITE_FIX->dumpAST(spaces + '\t');
+}
+
 
 //END FunctionDefinition
 
@@ -295,35 +321,6 @@ void Statements::dumpAST(std::string spaces) {
 }
 // END "STATEMENTS"
 
-// START "GROUPEDSTATEMENTS"
-GroupedStatements::~GroupedStatements() {
-    if (destructor)
-        std::cout << "~GroupedStatements()" << std::endl;
-}
-
-void GroupedStatements::addStatements(std::unique_ptr<Statements> statements) {
-    _groupedStatements.push_back(std::move(statements));
-}
-
-void GroupedStatements::evaluate(SymTab &symTab) {
-
-    if (debug)
-        std::cout << "void GroupedStatements::evaluate(SymTab &symTab)" << std::endl;
-
-    for_each(_groupedStatements.begin(), _groupedStatements.end(), [&](auto &s) { s->evaluate(symTab); });
-
-}
-
-void GroupedStatements::dumpAST(std::string space) {
-
-    std::cout << space;
-    std::cout << std::setw(15) << std::left << "AST_GroupedStatements " << this;
-    std::cout << " " << _groupedStatements.size() << std::endl;
-
-    for_each(_groupedStatements.begin(), _groupedStatements.end(), [&](auto &s) { s->dumpAST(space + '\t'); });
-
-}
-// END "GROUPEDSTATEMENTS"
 
 // START "COMPARISON"
 Comparison::Comparison() {}

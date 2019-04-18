@@ -4,9 +4,11 @@
 #include <string>
 // #include "FunctionDefinition.hpp"
 
-class FunctionDefinition {
-    FunctionDefinition() {}
-};
+#include "./statements/Statement.hpp"
+
+// class FunctionDefinition {
+//     FunctionDefinition() {}
+// };
 
 class FunctionMap {
 public:

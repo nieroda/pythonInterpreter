@@ -338,8 +338,72 @@ std::unique_ptr<RangeStmt> Parser::for_stmt() {
     range->addStatements(std::move(stmts));
 
     return range;
-    // return std::make_unique<ForStmt>(varName, wholeNumber, std::move(stmts));
 }
+
+std::unique_ptr<Statement> Parser::func_def() {
+    // func_def: 'def' ID '(' [parameter_list] ')' ':' suite
+    // Should be func_suite instead of suite
+    std::string scope = "Parser::func_def()";
+
+    auto tok = lexer.getToken();
+
+    if ( !tok->isFunc() ) 
+        die(scope, "Expected `def` instead got", tok);
+
+    tok = lexer.getToken();
+
+    if ( !tok->isName() )
+        die(scope, "Expected `<ID>` instead got", tok);
+
+    std::string funcName = tok->getName();
+
+    tok = lexer.getToken();
+
+    if ( !tok->isOpenParen() )
+        die(scope, "Expected `(` instead got", tok);
+
+    std::vector<std::string> parameterList = parameter_list();
+
+    tok = lexer.getToken();
+
+    if ( !tok->isCloseParen() )
+        die(scope, "Expected `)` instead got", tok);
+
+    tok = lexer.getToken();
+
+    if ( !tok->isColon() )
+        die(scope, "Expected `:` instead got", tok);
+
+    std::unique_ptr<Statements> 
+        FIX_AND_WRITE_FUNC_SUITE_THIS_IS_NOT_FUNC_SUITE = suite();
+
+    return std::make_unique<FunctionDefinition>(funcName, parameterList, std::move(FIX_AND_WRITE_FUNC_SUITE_THIS_IS_NOT_FUNC_SUITE));
+}
+
+std::vector<std::string> Parser::parameter_list() {
+    // parameter_list: ID {, ID }*
+    std::string scope = "Parser::parameter_list()";
+
+    std::vector<std::string> argNames;
+    auto tok = lexer.getToken();
+
+    while ( tok->isName() ) {
+
+        if ( tok->isComma() )
+            tok = lexer.getToken();
+
+        if ( !tok->isName() )
+            die(scope, "Expected `<ID>` got", tok);
+
+        argNames.push_back( tok->getName() );
+
+        tok = lexer.getToken();
+    }
+
+    lexer.ungetToken();
+    return argNames;
+}
+
 
 std::unique_ptr<Statements> Parser::suite() {
     //Parses the grammar rule 

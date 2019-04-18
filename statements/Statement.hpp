@@ -26,6 +26,7 @@ public:
     virtual void dumpAST(std::string) = 0;
 };
 
+
 class Statements {
 
 public:
@@ -117,15 +118,18 @@ private:
     std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> _testList;
 };
 
-// class FunctionDefinition : public Statement  {
-// public:
-//     Statement();
-
-//     virtual ~Statement() = default;
-//     virtual void evaluate(SymTab &symTab) = 0;
-//     virtual void dumpAST(std::string) = 0;
-    
-// };
+class FunctionDefinition : public Statement {
+public:
+    FunctionDefinition(std::string, std::vector<std::string>, std::unique_ptr<Statements>);
+    virtual ~FunctionDefinition() = default;
+    virtual void evaluate(SymTab &symTab);
+    virtual void dumpAST(std::string);
+private:
+    std::string _funcName;
+    std::vector<std::string> _paramList;
+    std::unique_ptr<Statements> _SUITE_NOT_FUNC_SUITE_FIX;
+    bool _hasBeenAddedToSymTab;
+};
  
 
 class Comparison {
