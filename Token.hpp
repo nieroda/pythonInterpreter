@@ -21,6 +21,13 @@ public:
     bool isOpenBracket()  const { return _symbol == '{'; }
     bool isCloseBracket() const { return _symbol == '}'; }
 
+    bool isOpenSquareBracket()  const { return _symbol == '['; }
+    bool isCloseSquareBracket() const { return _symbol == ']'; }
+
+
+
+    
+
     void symbol(char c) { _symbol = c; }
     char symbol() { return _symbol; }
 
@@ -70,6 +77,7 @@ public:
                isDivisionOperator();
     }
 
+  
 
     bool isName() const                   { return _name.length() > 0; }
     std::string getName() const                  { return _name; }
@@ -107,6 +115,8 @@ public:
     bool isRange()  const { return _keyword == "range"; }
     bool isFunc()   const { return _keyword == "def";   }
     bool isLen()    const { return _keyword == "len";   }
+    bool isPeriod() const { return _keyword == ".";     }
+    bool isReturn() const { return _keyword == "return";}
 
     bool isFloat()  const  { return _isFloat; }
     float getFloat() const { return _float; }

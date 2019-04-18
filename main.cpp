@@ -40,13 +40,22 @@ int main(int argc, char *argv[]) {
 
     SymTab symTab;
     Lexer lex = Lexer(inputStream);
-    Parser parser(lex);
-    std::unique_ptr<GroupedStatements> stmts =  parser.file_input();
 
-    stmts->evaluate(symTab);
+    // auto tok = lex.getToken();
+
+    // while ( !tok->eof() ) {
+    //   tok->print();
+    //   tok = lex.getToken();
+    //   std::cout << std::endl;
+    // }
+    Parser parser(lex);
+    // std::unique_ptr<GroupedStatements> stmts =  parser.file_input();
+    auto stmts = parser.file_input();
+
+    // stmts->evaluate(symTab);
     // std::cout << "Evaluate Done - Dumping Tree" << std::endl;
 //    std::cout << getMemoryUsage() << std::endl;
-    // stmts->dumpAST("");
+   stmts->dumpAST("");
 
     return 0;
 }

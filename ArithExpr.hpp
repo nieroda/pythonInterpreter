@@ -2,6 +2,7 @@
 #define EXPRINTER_ARITHEXPR_HPP
 
 #include <memory>
+#include <vector>
 #include <optional>
 
 #include "SymTab.hpp"
@@ -119,6 +120,19 @@ public:
     virtual void print();
     // virtual TypeDescriptor evaluate(SymTab &);
     virtual std::unique_ptr<TypeDescriptor> evaluate(SymTab &);
+};
+
+class FunctionCall: public ExprNode {
+public:
+    FunctionCall(std::shared_ptr<Token>, std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>>);
+    ~FunctionCall() = default;
+
+    virtual void dumpAST(std::string);
+    virtual void print();
+    virtual std::unique_ptr<TypeDescriptor> evaluate(SymTab &);
+private:
+    std::string _functionName;
+    std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> _testList;
 };
 
 #endif //EXPRINTER_ARITHEXPR_HPP

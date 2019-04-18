@@ -233,8 +233,11 @@ void RangeStmt::parseTestList(SymTab &symTab) {
     }
 }
 
-void RangeStmt::addStatements(std::unique_ptr<GroupedStatements> gs) {
-    _forBody = std::move(gs);
+// void RangeStmt::addStatements(std::unique_ptr<GroupedStatements> gs) {
+//     _forBody = std::move(gs);
+// }
+void RangeStmt::addStatements(std::unique_ptr<Statements> stmts) {
+    _forBody = std::move(stmts);
 }
 
 void RangeStmt::addTestList(std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> testList) {
@@ -254,6 +257,10 @@ void RangeStmt::editOptionals(int which, std::optional<int> opt) {
 }
 // END "RangeSTMT"
 
+
+//START FunctionDefinition
+
+//END FunctionDefinition
 
 // START "STATEMENTS"
 Statements::Statements() {}
@@ -324,9 +331,16 @@ Comparison::Comparison() {}
 
 
 // START "IF"
+// IfStmt::IfStmt(
+//     std::unique_ptr<ExprNode> comp,
+//     std::unique_ptr<GroupedStatements> stmts
+// ) {
+//     _if.first = std::move(comp);
+//     _if.second = std::move(stmts);
+// }
 IfStmt::IfStmt(
     std::unique_ptr<ExprNode> comp,
-    std::unique_ptr<GroupedStatements> stmts
+    std::unique_ptr<Statements> stmts
 ) {
     _if.first = std::move(comp);
     _if.second = std::move(stmts);
@@ -367,11 +381,13 @@ ElifStmt::~ElifStmt() {
         std::cout << "~ElifStmt()" << std::endl;
 }
 
-void ElifStmt::addStatement(std::unique_ptr<ExprNode> elif, std::unique_ptr<GroupedStatements> stmts) {
+// void ElifStmt::addStatement(std::unique_ptr<ExprNode> elif, std::unique_ptr<GroupedStatements> stmts) {
+void ElifStmt::addStatement(std::unique_ptr<ExprNode> elif, std::unique_ptr<Statements> stmts) {
     _elif.push_back(
         std::pair<
             std::unique_ptr<ExprNode>,
-            std::unique_ptr<GroupedStatements>
+            // std::unique_ptr<GroupedStatements>
+            std::unique_ptr<Statements>
         >{
             std::move(elif),
             std::move(stmts)
@@ -407,8 +423,11 @@ void ElifStmt::dumpAST(std::string spaces) {
 
 
 // START "ELSE" 
-ElseStmt::ElseStmt(std::unique_ptr<GroupedStatements> s):
-    stmts{std::move(s)}
+// ElseStmt::ElseStmt(std::unique_ptr<GroupedStatements> s):
+//     stmts{std::move(s)}
+// {}
+ElseStmt::ElseStmt(std::unique_ptr<Statements> s):
+    _stmts{std::move(s)}
 {}
 
 ElseStmt::~ElseStmt() {
@@ -421,7 +440,7 @@ bool ElseStmt::evaluate(SymTab &symTab) {
     if (debug)
         std::cout << "bool ElseStmt::evaluate(SymTab &symTab)" << std::endl;
 
-    stmts->evaluate(symTab);
+    _stmts->evaluate(symTab);
 
     return true;
 }
@@ -429,6 +448,6 @@ bool ElseStmt::evaluate(SymTab &symTab) {
 void ElseStmt::dumpAST(std::string spaces) {
     std::cout << spaces << "ElseStmt    ";
     std::cout << this << "\t" << std::endl;
-    stmts->dumpAST(spaces + "\t");
+    _stmts->dumpAST(spaces + "\t");
 }
 // END "ELSE"

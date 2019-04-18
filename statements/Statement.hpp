@@ -41,21 +41,6 @@ private:
     std::vector<std::unique_ptr<Statement>> _statements;
 };
 
-class GroupedStatements {
-
-public:
-    GroupedStatements() = default;
-
-    void addStatements(std::unique_ptr<Statements> statements);
-    void evaluate(SymTab &symTab);
-    ~GroupedStatements(); /*= default;*/
-
-    void dumpAST(std::string);
-
-private:
-    std::vector<std::unique_ptr<Statements>> _groupedStatements;
-};
-
 class AssignStmt : public Statement {
 
 public:
@@ -116,7 +101,8 @@ public:
 
     void parseTestList(SymTab &symTab);
     
-    void addStatements(std::unique_ptr<GroupedStatements>);
+    // void addStatements(std::unique_ptr<GroupedStatements>);
+    void addStatements(std::unique_ptr<Statements>);
     
     void addTestList(std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>>);
     void editOptionals(int, std::optional<int>);
@@ -125,10 +111,22 @@ private:
     std::string _id;
     std::optional<int> _start, _end, _step;
 
-    std::unique_ptr<GroupedStatements> _forBody;
+    // std::unique_ptr<GroupedStatements> _forBody;
+    std::unique_ptr<Statements> _forBody;
 
     std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> _testList;
 };
+
+// class FunctionDefinition : public Statement  {
+// public:
+//     Statement();
+
+//     virtual ~Statement() = default;
+//     virtual void evaluate(SymTab &symTab) = 0;
+//     virtual void dumpAST(std::string) = 0;
+    
+// };
+ 
 
 class Comparison {
 
@@ -143,9 +141,14 @@ class IfStmt : public Comparison {
 
 public:
 
+    // IfStmt(
+    //     std::unique_ptr<ExprNode>,
+    //     std::unique_ptr<GroupedStatements>
+    // );
+
     IfStmt(
         std::unique_ptr<ExprNode>,
-        std::unique_ptr<GroupedStatements>
+        std::unique_ptr<Statements>
     );
 
     virtual ~IfStmt(); /* = default;*/
@@ -155,7 +158,8 @@ public:
 private: 
     std::pair<
         std::unique_ptr<ExprNode>,
-        std::unique_ptr<GroupedStatements>
+        // std::unique_ptr<GroupedStatements>
+        std::unique_ptr<Statements>
     > _if;
 };
 
@@ -165,8 +169,9 @@ public:
     ElifStmt();
     virtual ~ElifStmt(); /* = default*/;
 
-    void addStatement(std::unique_ptr<ExprNode>, std::unique_ptr<GroupedStatements>);
+    // void addStatement(std::unique_ptr<ExprNode>, std::unique_ptr<GroupedStatements>);
     // void addStatement(ExprNode *, std::unique_ptr<GroupedStatements>);
+    void addStatement(std::unique_ptr<ExprNode>, std::unique_ptr<Statements>);
 
     virtual bool evaluate(SymTab &symTab);
     virtual void dumpAST(std::string);
@@ -175,7 +180,8 @@ private:
     std::vector<
         std::pair<
             std::unique_ptr<ExprNode>,
-            std::unique_ptr<GroupedStatements>
+            // std::unique_ptr<GroupedStatements>
+            std::unique_ptr<Statements>
         >
     > _elif;
 };
@@ -183,14 +189,16 @@ private:
 class ElseStmt : public Comparison {
 
 public:
-    ElseStmt(std::unique_ptr<GroupedStatements>);
+    // ElseStmt(std::unique_ptr<GroupedStatements>);
+    ElseStmt(std::unique_ptr<Statements>);
     virtual ~ElseStmt(); /* = default;*/
 
     virtual bool evaluate(SymTab &symTab);
     virtual void dumpAST(std::string);
 
 private:
-    std::unique_ptr<GroupedStatements> stmts;
+    // std::unique_ptr<GroupedStatements> stmts;
+    std::unique_ptr<Statements> _stmts;
 };
 
 

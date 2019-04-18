@@ -200,7 +200,11 @@ void Lexer::readNumber(const bool isNegative, const std::shared_ptr<Token>& tok)
     if (inStream.good())
         inStream.putback(c);
 
-    if ( isFloat ) {
+    if ( number == "." ) {
+        tok->setKeyword(".");
+    }
+
+    else if ( isFloat ) {
         float floatValue = atof(number.c_str());
         if (isNegative)
             floatValue *= -1.;
@@ -326,7 +330,7 @@ auto Lexer::getToken() -> std::shared_ptr<Token> {
         inStream.putback(c);
         token->relExp( readEqualityOperator() );
     } else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == ',' ||
-               c == ';' || c == '(' || c == ')' || c == '{' || c == '}' || c == ':') {
+               c == ';' || c == '(' || c == ')' || c == '{' || c == '}' || c == ':' || c == '[' || c == ']') {
         token->symbol(c);
      }
      else if ( c == '#' ) {

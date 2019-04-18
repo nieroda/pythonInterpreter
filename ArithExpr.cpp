@@ -319,3 +319,36 @@ void StringExp::dumpAST(std::string space) {
     std::cout << std::endl;
 }
 // StringExp END
+
+
+//Start FunctionCall
+
+FunctionCall::FunctionCall(std::shared_ptr<Token> functionName, std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> testList):
+    ExprNode{functionName},
+   _testList{std::move(testList)}
+    {}
+
+std::unique_ptr<TypeDescriptor> FunctionCall::evaluate(SymTab &symTab) {
+    //TODO
+
+    //Use _functionNAme to get shared pointer reference to class FunctionDefinition
+    // size check
+    //Set parameters in symtab /w scope
+    //evaluate function statemets from sp
+    // remove functionArgument names from scope
+    return Descriptor::Int::createIntDescriptor(1);
+}
+
+void FunctionCall::dumpAST(std::string indent) {
+
+    // std::cout << indent << "FunctionCall: " << _functionName << " " << this << "\n";
+
+    // for_each(_testList->begin(), _testList->end(), [&] (auto &args) {
+    //     args->dumpAST(indent + "\t");
+    // });
+}
+
+void FunctionCall::print() {}
+
+
+// End FunctionCall

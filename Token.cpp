@@ -39,6 +39,8 @@ void Token::print() const {
     else if ( eof() )                       std::cout << "EOF" ;
     else if ( isOpenParen() )               std::cout << "(" ;
     else if ( isCloseParen() )              std::cout << ")" ;
+    else if ( isOpenSquareBracket() )       std::cout << "[";
+    else if ( isCloseSquareBracket() )      std::cout << "]";
     else if ( isAssignmentOperator() )      std::cout << "=" ;
     else if ( isSemiColon() )               std::cout << ";" ;
     else if ( isColon() )                   std::cout << ":" ;
@@ -67,6 +69,9 @@ void Token::print() const {
       else if ( isNot() )    std::cout << "not";
       else if ( isIn() )     std::cout << "in";
       else if ( isRange() )  std::cout << "range";
+      else if ( isPeriod() ) std::cout << ".";
+      else if ( isFunc() )   std::cout << "def";
+      else if ( isLen() )    std::cout << "len";
       else {
         std::cout << "Unidentified Keyword ... update Token.cpp / Token.hpp";
       }

@@ -3,11 +3,12 @@
 #define __PARSER_HPP
 
 #include <vector>
+#include <string>
 
 #include "statements/Statement.hpp"
 #include "lex/Lexer.hpp"
 #include "ArithExpr.hpp"
-
+#include "FunctionMap.hpp"
 class Parser { 
     public:
 
@@ -19,20 +20,27 @@ class Parser {
             std::shared_ptr<Token>
         );
 
-        std::unique_ptr<GroupedStatements> file_input();
+        void getEOL(std::string);
 
-        std::unique_ptr<Statements> stmt();
-        std::unique_ptr<Statements> simple_stmt();
-        std::unique_ptr<AssignStmt> assign_stmt();
-        std::unique_ptr<Statements> compound_stmt();
+        std::unique_ptr<Statements> file_input();
+
+        std::unique_ptr<Statement> stmt();
+
+        std::unique_ptr<Statement> simple_stmt();
+
+        std::unique_ptr<AssignStmt> assign_stmt(std::shared_ptr<Token>);
+        
+        std::unique_ptr<Statement> compound_stmt();
+
         std::unique_ptr<PrintStatement> print_stmt();
 
         std::unique_ptr<IfStatement> if_stmt();
         std::unique_ptr<RangeStmt> for_stmt();
 
-        std::unique_ptr<GroupedStatements> suite();
+        std::unique_ptr<Statements> suite();
 
         std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> testlist();
+
 
         std::unique_ptr<ExprNode> test();
         std::unique_ptr<ExprNode> or_test();
@@ -44,10 +52,15 @@ class Parser {
         std::unique_ptr<ExprNode> term();
         
         std::unique_ptr<ExprNode> factor();
+
+        std::unique_ptr<ExprNode> call(std::shared_ptr<Token>);
+
         std::unique_ptr<ExprNode> atom();
 
     private:
         Lexer &lexer;
+        std::shared_ptr<FunctionMap> _functionMap;
+
 };
 
 #endif
