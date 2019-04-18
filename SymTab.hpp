@@ -19,14 +19,22 @@ public:
     void createEntryFor(std::string, double);
     void createEntryFor(std::string, bool);
     void createEntryFor(std::string, std::string);
-    void addDescriptor(std::string,  std::shared_ptr<NumberDescriptor>);
 
     void setValueFor(std::string, std::shared_ptr<TypeDescriptor>);
     // int getValueFor(std::string vName);
 
     TypeDescriptor *getValueFor(std::string);
 
+    void openScope();
+    void closeScope();
+
+    std::shared_ptr<TypeDescriptor> getReturnValue() { return _returnValue; }
+    void setReturnValue(std::shared_ptr<TypeDescriptor> rv) { _returnValue = rv; }
+
 private:
+
+    void addDescriptor(std::string,  std::shared_ptr<NumberDescriptor>);
+
 
     std::map<
         std::string, 
@@ -36,6 +44,8 @@ private:
     std::stack<
         std::map< std::string, std::shared_ptr<TypeDescriptor>
 	>> symTab;
+
+    std::shared_ptr<TypeDescriptor> _returnValue;
 };
 
 #endif //EXPRINTER_SYMTAB_HPP

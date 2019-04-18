@@ -11,6 +11,7 @@
         globalSymTab[vName] = std::move(descriptor);
 }*/
 
+
 void SymTab::addDescriptor(std::string vName, std::shared_ptr<NumberDescriptor> descriptor) {
     if ( symTab.size() > 0 )
         (symTab.top())[vName] = std::move(descriptor);
@@ -61,17 +62,34 @@ void SymTab::createEntryFor(std::string vName, std::string value) {
 }
 
 void SymTab::setValueFor(std::string vName, std::shared_ptr<TypeDescriptor> sp) {
-    globalSymTab[vName] = std::move(sp);
+    
+    if ( symTab.size() > 0 )
+        (symTab.top())[vName] = /*std::move(*/sp/*)*/;
+    else
+        globalSymTab[vName] = /*std::move(*/sp/*)*/;
+
+    
+    
+    // globalSymTab[vName] = std::move(sp);
 }
 
 bool SymTab::isDefined(std::string vName) {
+    
+    if ( symTab.size() > 0 )
+        return (symTab.top()).find(vName) != (symTab.top()).end();
     return globalSymTab.find(vName) != globalSymTab.end();
 }
 
 bool SymTab::erase(std::string vName) {
     if (isDefined(vName)) {
-        auto iterator = globalSymTab.find(vName);
-        globalSymTab.erase(iterator);
+
+        if ( symTab.size() > 0 ) {
+            auto iterator = (symTab.top()).find(vName);
+            (symTab.top()).erase(iterator);
+        } else {
+            auto iterator = globalSymTab.find(vName);
+            globalSymTab.erase(iterator);
+        }
         return true;
     }
     return false;
@@ -90,3 +108,19 @@ TypeDescriptor *SymTab::getValueFor(std::string vName) {
     return globalSymTab.find(vName)->second.get();
 
 }
+
+void SymTab::openScope() {
+
+    std::map<std::string, std::shared_ptr<TypeDescriptor>> newScope;
+    symTab.push(newScope);
+}
+
+void SymTab::closeScope() {
+
+    if ( symTab.size() == 0 ) {
+        std::cout << "SymTab::closeScope() -> can't close scope - stack size is zero" << std::endl;
+        exit(1);
+    }
+    symTab.pop();
+}
+
