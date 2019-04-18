@@ -398,15 +398,16 @@ std::unique_ptr<IfStatement> Parser::if_stmt() {
     }
 
     if (tok->isElse()) {
-        std::cout << "Is else" << std::endl;
+        // std::cout << "Is else" << std::endl;
         conditionHit = true;
         tok = lexer.getToken();
         if ( !tok->isColon() )
             die(scope, "Expected `:` keyword, instead got", tok);
 
         // std::unique_ptr<GroupedStatements> stmts = suite();
-        std::unique_ptr<Statements> stmts = suite();
-        auto elseStmt = std::make_unique<ElseStmt>(std::move(stmts));
+        // std::unique_ptr<Statements> stmts = suite();
+        // auto elseStmt = std::make_unique<ElseStmt>(std::move(stmts));
+        auto elseStmt = std::make_unique<ElseStmt>(suite());
 
         ifStatement->addElseStmt(std::move(elseStmt));
     }
