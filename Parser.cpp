@@ -177,6 +177,9 @@ std::unique_ptr<Statement> Parser::compound_stmt() {
     } else if ( tok->isIf() ) {
         lexer.ungetToken();
         return if_stmt();
+    } else if ( tok->isFunc() ) {
+        lexer.ungetToken();
+        return func_def();
     }
 
     die(scope, "Parser::compound_stmt() expected _keyword -> { FOR | IF }, instead got ", tok);
@@ -398,6 +401,9 @@ std::vector<std::string> Parser::parameter_list() {
         argNames.push_back( tok->getName() );
 
         tok = lexer.getToken();
+
+        if ( tok->isComma() )
+            tok = lexer.getToken();
     }
 
     lexer.ungetToken();

@@ -279,7 +279,7 @@ void FunctionDefinition::evaluate(SymTab &symTab) {
 }
 
 void FunctionDefinition::dumpAST(std::string spaces) {
-    std::cout << spaces << "FunctionDef: " << _funcName << " " << this << " (";
+    std::cout << spaces << "FunctionDef: " << _funcName << " " << this << " ( ";
     for_each(_paramList.begin(), _paramList.end(), [](auto &str) { std::cout << str << " "; });
     std::cout << ")" << std::endl;
     _SUITE_NOT_FUNC_SUITE_FIX->dumpAST(spaces + '\t');
