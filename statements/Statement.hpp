@@ -41,21 +41,6 @@ private:
     std::vector<std::unique_ptr<Statement>> _statements;
 };
 
-class GroupedStatements {
-
-public:
-    GroupedStatements() = default;
-
-    void addStatements(std::unique_ptr<Statements> statements);
-    void evaluate(SymTab &symTab);
-    ~GroupedStatements(); /*= default;*/
-
-    void dumpAST(std::string);
-
-private:
-    std::vector<std::unique_ptr<Statements>> _groupedStatements;
-};
-
 class AssignStmt : public Statement {
 
 public:

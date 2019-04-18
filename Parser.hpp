@@ -22,18 +22,14 @@ class Parser {
 
         void getEOL(std::string);
 
-        // std::unique_ptr<GroupedStatements> file_input();
         std::unique_ptr<Statements> file_input();
 
-        // std::unique_ptr<Statements> stmt();
         std::unique_ptr<Statement> stmt();
 
         std::unique_ptr<Statement> simple_stmt();
-        // std::unique_ptr<Statements> simple_stmt();
 
         std::unique_ptr<AssignStmt> assign_stmt(std::shared_ptr<Token>);
         
-        // std::unique_ptr<Statements> compound_stmt();
         std::unique_ptr<Statement> compound_stmt();
 
         std::unique_ptr<PrintStatement> print_stmt();
@@ -41,7 +37,6 @@ class Parser {
         std::unique_ptr<IfStatement> if_stmt();
         std::unique_ptr<RangeStmt> for_stmt();
 
-        // std::unique_ptr<GroupedStatements> suite();
         std::unique_ptr<Statements> suite();
 
         std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> testlist();

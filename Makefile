@@ -9,7 +9,7 @@ objects =  Token.o Parser.o ArithExpr.o SymTab.o lex/Lexer.o statements/Statemen
 
 statement.x: $(objects)
 	g++ $(CFLAGS) -g -o statement.x $(objects)
-	# bash ./tests/tests.sh
+	bash ./tests/tests.sh
 
 
 subdirs:

@@ -36,29 +36,6 @@ std::unique_ptr<Statements> Parser::file_input() {
     return stmts;
 }
 
-// std::unique_ptr<GroupedStatements> Parser::file_input() {
-
-//     std::string scope = "Parser::file_input()";
-
-//     if (debug)
-//         std::cout << scope << std::endl;
-
-//     auto tok = lexer.getToken();
-
-//     std::unique_ptr<GroupedStatements> gStmts = std::make_unique<GroupedStatements>();
-
-//     while ( tok->isPrint() || tok->isName() || tok->isFor() || tok->isIf() ) {
-
-//         lexer.ungetToken();
-
-//         std::unique_ptr<Statements> statements = stmt();
-//         gStmts->addStatements(std::move(statements));
-
-//         tok = lexer.getToken();
-
-//     }
-//     return gStmts;
-// }
 
 std::unique_ptr<Statement> Parser::stmt() {
     // stmt -> simple_stmt | compound_stmt
@@ -73,8 +50,6 @@ std::unique_ptr<Statement> Parser::stmt() {
     if ( tok->isFunc() || tok->isFor() || tok->isIf() ) {
 
         lexer.ungetToken();
-        // std::unique_ptr<Statement> compoundStatement = compound_stmt();
-        // return compoundStatement;
         return compound_stmt();
 
     } else {
@@ -83,36 +58,6 @@ std::unique_ptr<Statement> Parser::stmt() {
     }
 }
 
-// stmt -> simple_stmt | compound_stmt
-// std::unique_ptr<Statements> Parser::stmt() {
-
-//     std::string scope = "Parser::stmt()";
-
-//     if (debug)
-//         std::cout << scope << std::endl;
-
-//     auto tok = lexer.getToken();
-
-//     if (tok->isPrint() || tok->isName()) {
-
-//         lexer.ungetToken();
-//         std::unique_ptr<Statements> simpleStatement = simple_stmt();
-//         return simpleStatement;
-
-//     } else if (tok->isIf() || tok->isFor()) {
-
-//         lexer.ungetToken();
-//         std::unique_ptr<Statements> compoundStatement = compound_stmt();
-//         return compoundStatement;
-
-//     } else {
-
-//         std::string err = "Expected simple_stmt<print|assign> | compound_stmt<if|for> instead got,";
-//         die(scope, err, tok);
-//     }
-
-//     return nullptr;
-// }
 
 std::unique_ptr<Statement> Parser::simple_stmt() {
     // Parse grammar rule 
@@ -178,54 +123,6 @@ void Parser::getEOL(std::string scope) {
         die(scope, "Generic getEOL", tok);
 }
 
-// std::unique_ptr<Statements> Parser::simple_stmt() {
-//     // Parse grammar rule 
-//     // <simple_stmt> -> { print_stmt | assign_stmt }+ NEWLINE
-
-//     std::string scope = "Parser::simple_stmt";
-//     if (debug)
-//         std::cout << scope << std::endl;
-    
-//     auto stmts = std::make_unique<Statements>();
-//     auto tok = lexer.getToken();
-
-//     if ( !( tok->isPrint() || tok->isName()) ) 
-//         die(scope, "Violating + rule, no statements", tok);
-
-//     while ( tok->isPrint() || tok->isName() ) {
-
-//         lexer.ungetToken();
-
-//         if ( tok->isName() ) {
-//             std::unique_ptr<AssignStmt> assignStmt = assign_stmt();
-//             stmts->addStatement(std::move(assignStmt));
-
-//         } else if ( tok->isPrint() ) {
-//             std::unique_ptr<PrintStatement> printStmt = print_stmt();
-//             stmts->addStatement(std::move(printStmt));
-//         } else {
-//             die(scope, "Expected `NAME` || `PRINT`, instead got", tok);
-//         }
-
-//         tok = lexer.getToken();
-
-//         if ( tok->eof() )
-//             break;
-
-//         if ( !tok->eol() ) {
-//             die(scope, "Expected `EOL`, instead got", tok);
-//         }
-
-//         tok = lexer.getToken();
-//     }  
-
-//     lexer.ungetToken();
-
-//     if (debug)
-//         std::cout << scope << " return" << std::endl;
-
-//     return stmts;
-// }
 
 std::unique_ptr<PrintStatement> Parser::print_stmt() {
 
@@ -251,14 +148,6 @@ std::unique_ptr<AssignStmt> Parser::assign_stmt(std::shared_ptr<Token> varName) 
     
     if (debug)
         std::cout << scope << std::endl;
-
-    // if ( ID == "" ) 
-    //     die(scope, "ID is Null", std::make_shared<Token>());
-
-    // auto varName = lexer.getToken();
-
-    // if ( !varName->isName() )
-    //     die(scope, "Parser::assign_stmt() expected `NAME` instead got ", varName);
 
     auto assignOp = lexer.getToken();
     if ( !assignOp->isAssignmentOperator() )
@@ -287,13 +176,6 @@ std::unique_ptr<Statement> Parser::compound_stmt() {
         return for_stmt();
     } else if ( tok->isIf() ) {
         lexer.ungetToken();
-        // auto foo = if_stmt();
-        // tok = lexer.getToken();
-        // std::cout << "Tok: ";
-        // tok->print();
-        // std::cout << std::endl;
-        // // lexer.ungetToken();
-        // return foo;
         return if_stmt();
     }
 
@@ -302,35 +184,6 @@ std::unique_ptr<Statement> Parser::compound_stmt() {
 
 }
 
-// std::unique_ptr<Statements> Parser::compound_stmt() {
-
-//     std::string scope = "Parser::compound_stmt";
-//     if (debug)
-//         std::cout << scope << std::endl;
-
-//     auto stmts = std::make_unique<Statements>();
-//     auto tok = lexer.getToken();
-
-//     if (tok->isFor()) {
-
-//         lexer.ungetToken();
-//         stmts->addStatement(for_stmt());
-
-//     } else if (tok->isIf()) {
-
-//         lexer.ungetToken();
-//         stmts->addStatement(if_stmt());
-
-//     } else {
-//         die(scope, "Parser::compound_stmt() expected _keyword -> { FOR | IF }, instead got ", tok);
-//     }
-
-//     if (debug)
-//         std::cout << scope << " return" << std::endl;
-
-
-//     return stmts;
-// }
 
 std::unique_ptr<IfStatement> Parser::if_stmt() {
 
@@ -521,49 +374,6 @@ std::unique_ptr<Statements> Parser::suite() {
     return nullptr;
 }
 
-// std::unique_ptr<GroupedStatements> Parser::suite() {
-//     //Parses the grammar rule 
-//     // <suite> -> EOL INDENT stmt+ DEDENT
-
-//     std::string scope = "Parser::suite";
-
-//     std::unique_ptr<GroupedStatements> groupedStatements = std::make_unique<GroupedStatements>();
-
-//     if (debug)
-//         std::cout << scope << std::endl;
-
-//     auto tok = lexer.getToken();
-
-//     if ( !tok->eol() )
-//         die(scope, "Expected an `EOL`, instead got", tok);
-
-//     tok = lexer.getToken();
-
-//     if ( !tok->isIndent() )
-//         die(scope, "Expected an `INDENT`, instead got", tok);
-
-//     //Rule is +
-//     auto stmts = stmt();
-//     groupedStatements->addStatements(std::move(stmts));
-//     tok = lexer.getToken();
-
-//     while ( tok->isPrint() || tok->isName() || tok->isIf() || tok->isFor() ) {
-
-//         lexer.ungetToken();
-//         auto stmts = stmt();
-//         groupedStatements->addStatements(std::move(stmts));
-
-//         tok = lexer.getToken();
-//     }
-
-//     if ( !tok->isDedent() )
-//         die(scope, "Expected a DEDENT, instead got", tok);
-
-//     if (debug)
-//         std::cout << scope << " return" << std::endl;
-
-//     return groupedStatements;
-// }
 
 std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> Parser::testlist() {
 
