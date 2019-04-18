@@ -329,13 +329,36 @@ FunctionCall::FunctionCall(std::shared_ptr<Token> functionName, std::unique_ptr<
     {}
 
 std::unique_ptr<TypeDescriptor> FunctionCall::evaluate(SymTab &symTab) {
-    //TODO
 
     //Use _functionNAme to get shared pointer reference to class FunctionDefinition
     // size check
     //Set parameters in symtab /w scope
     //evaluate function statemets from sp
     // remove functionArgument names from scope
+
+
+    // INCOMPLETE
+        // INCOMPLETE
+    // INCOMPLETE
+    // INCOMPLETE
+    // INCOMPLETE
+    // INCOMPLETE
+    // INCOMPLETE
+    // INCOMPLETE
+    // INCOMPLETE
+    // INCOMPLETE
+    // INCOMPLETE
+
+    auto functionPointer = symTab.getFunction(_functionName);
+
+    if ( functionPointer->_SUITE_NOT_FUNC_SUITE_FIX->length() != _testList->size()  ) {
+        std::cout << "Error FunctionCall::evaluate -> Caller Args != Calling Args" << std::endl;
+    }
+
+    sumTab.openScope();
+
+
+    symTab.closeScope();
     return Descriptor::Int::createIntDescriptor(1);
 }
 

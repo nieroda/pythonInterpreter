@@ -38,7 +38,9 @@ public:
 
     void dumpAST(std::string);
 
-private:
+    int length() { return _statements.size(); }
+
+public:
     std::vector<std::unique_ptr<Statement>> _statements;
 };
 
@@ -124,10 +126,12 @@ public:
     virtual ~FunctionDefinition() = default;
     virtual void evaluate(SymTab &symTab);
     virtual void dumpAST(std::string);
+
+std::vector<std::string> _paramList;
+std::unique_ptr<Statements> _SUITE_NOT_FUNC_SUITE_FIX;
+
 private:
     std::string _funcName;
-    std::vector<std::string> _paramList;
-    std::unique_ptr<Statements> _SUITE_NOT_FUNC_SUITE_FIX;
     bool _hasBeenAddedToSymTab;
 };
 
