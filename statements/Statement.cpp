@@ -262,20 +262,22 @@ void RangeStmt::editOptionals(int which, std::optional<int> opt) {
 FunctionDefinition::FunctionDefinition(
     std::string funcName,
     std::vector<std::string> paramList,
-    std::unique_ptr<Statements> SUITE_NOT_FUNC_SUITE_FIX):
+    std::unique_ptr<Statements> SUITE_NOT_FUNC_SUITE_FIX,
+    bool hasBeenAddedToSymTab):
     _funcName{funcName},
     _paramList{paramList},
     _SUITE_NOT_FUNC_SUITE_FIX{std::move(SUITE_NOT_FUNC_SUITE_FIX)},
-    _hasBeenAddedToSymTab{false}
+    _hasBeenAddedToSymTab{hasBeenAddedToSymTab}
 {}
 
 void FunctionDefinition::evaluate(SymTab &symTab) {
     if ( !_hasBeenAddedToSymTab ) {
-    //  symTab.addFunction(std::make_unqiue<FunctionDefinition>(_funcName, _paramList, std::move(_SUITE_NOT_FUNC_SUITE_FIX), true));
+        symTab.setFunction(_funcName, std::make_shared<FunctionDefinition>
+            (_funcName, _paramList, std::move(_SUITE_NOT_FUNC_SUITE_FIX), true));
      return;
     }
 
-    _SUITE_NOT_FUNC_SUITE_FIX->evaluate(symTab);
+    // _SUITE_NOT_FUNC_SUITE_FIX->evaluate(symTab);
 }
 
 void FunctionDefinition::dumpAST(std::string spaces) {

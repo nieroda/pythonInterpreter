@@ -8,7 +8,7 @@
 #include "statements/Statement.hpp"
 #include "lex/Lexer.hpp"
 #include "ArithExpr.hpp"
-#include "FunctionMap.hpp"
+// #include "FunctionMap.hpp"
 class Parser { 
     public:
 
@@ -62,7 +62,7 @@ class Parser {
 
     private:
         Lexer &lexer;
-        std::shared_ptr<FunctionMap> _functionMap;
+        // std::shared_ptr<FunctionMap> _functionMap;
 
 };
 

@@ -7,6 +7,10 @@
 
 #include "Descriptor.hpp"
 
+// #include "./statements/Statement.hpp"
+class FunctionDefinition;
+
+
 // This is a flat and integer-based symbol table. It allows for variables to be
 // initialized, determines if a give variable has been defined or not, and if
 // a variable has been defined, it returns its value.
@@ -31,6 +35,9 @@ public:
     std::shared_ptr<TypeDescriptor> getReturnValue() { return _returnValue; }
     void setReturnValue(std::shared_ptr<TypeDescriptor> rv) { _returnValue = rv; }
 
+    void setFunction(std::string fName, std::shared_ptr<FunctionDefinition> fDef) { _functionTable[fName] = fDef; }
+    std::shared_ptr<FunctionDefinition> getFunction(std::string fName) { return _functionTable[fName]; }
+
 private:
 
     void addDescriptor(std::string,  std::shared_ptr<NumberDescriptor>);
@@ -40,6 +47,11 @@ private:
         std::string, 
         std::shared_ptr<TypeDescriptor>
     > globalSymTab;
+
+    std::map<
+        std::string,
+        std::shared_ptr<FunctionDefinition>
+    > _functionTable;
 
     std::stack<
         std::map< std::string, std::shared_ptr<TypeDescriptor>

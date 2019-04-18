@@ -120,7 +120,7 @@ private:
 
 class FunctionDefinition : public Statement {
 public:
-    FunctionDefinition(std::string, std::vector<std::string>, std::unique_ptr<Statements>);
+    FunctionDefinition(std::string, std::vector<std::string>, std::unique_ptr<Statements>, bool);
     virtual ~FunctionDefinition() = default;
     virtual void evaluate(SymTab &symTab);
     virtual void dumpAST(std::string);

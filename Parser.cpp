@@ -380,7 +380,7 @@ std::unique_ptr<Statement> Parser::func_def() {
     std::unique_ptr<Statements> 
         FIX_AND_WRITE_FUNC_SUITE_THIS_IS_NOT_FUNC_SUITE = suite();
 
-    return std::make_unique<FunctionDefinition>(funcName, parameterList, std::move(FIX_AND_WRITE_FUNC_SUITE_THIS_IS_NOT_FUNC_SUITE));
+    return std::make_unique<FunctionDefinition>(funcName, parameterList, std::move(FIX_AND_WRITE_FUNC_SUITE_THIS_IS_NOT_FUNC_SUITE), false);
 }
 
 std::vector<std::string> Parser::parameter_list() {
