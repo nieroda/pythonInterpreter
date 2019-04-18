@@ -2,6 +2,7 @@
 #define EXPRINTER_SYMTAB_HPP
 
 #include <string>
+#include <stack>
 #include <map>
 
 #include "Descriptor.hpp"
@@ -14,12 +15,12 @@ class SymTab {
 public:
     bool isDefined(std::string vName);
     bool erase(std::string vName);
-
     void createEntryFor(std::string, int);
     void createEntryFor(std::string, double);
     void createEntryFor(std::string, bool);
     void createEntryFor(std::string, std::string);
-    
+    void addDescriptor(std::string,  std::shared_ptr<NumberDescriptor>);
+
     void setValueFor(std::string, std::shared_ptr<TypeDescriptor>);
     // int getValueFor(std::string vName);
 
@@ -30,11 +31,16 @@ private:
     std::map<
         std::string, 
         std::shared_ptr<TypeDescriptor>
-    > symTab;
+    > globalSymTab;
+
+    std::stack<
+        std::map< std::string, std::shared_ptr<TypeDescriptor>
+	>> symTab;
 };
 
 #endif //EXPRINTER_SYMTAB_HPP
 
+// STD MOVE
 // template<class _Ty> inline
 //   constexpr typename remove_reference<_Ty>::type&&
 //     move(_Ty&& _Arg) _NOEXCEPT
