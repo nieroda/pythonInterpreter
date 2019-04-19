@@ -7,7 +7,6 @@
 
 #include "Descriptor.hpp"
 
-// #include "./statements/Statement.hpp"
 class FunctionDefinition;
 
 
@@ -36,7 +35,12 @@ public:
     void setReturnValue(std::shared_ptr<TypeDescriptor> rv) { _returnValue = rv; }
 
     void setFunction(std::string fName, std::shared_ptr<FunctionDefinition> fDef) { _functionTable[fName] = fDef; }
-    std::shared_ptr<FunctionDefinition> getFunction(std::string fName) { return _functionTable[fName]; }
+    std::shared_ptr<FunctionDefinition> getFunction(std::string fName) {
+      if (_functionTable[fName] == nullptr) {
+          std::cout << fName << " does not exist!\n";
+      }
+      return _functionTable[fName];
+     }
 
 private:
 
@@ -44,7 +48,7 @@ private:
 
 
     std::map<
-        std::string, 
+        std::string,
         std::shared_ptr<TypeDescriptor>
     > globalSymTab;
 
@@ -69,4 +73,3 @@ private:
 //   {
 //     return (static_cast<typename remove_reference<_Ty>::type&&>(_Arg));
 //   }
- 

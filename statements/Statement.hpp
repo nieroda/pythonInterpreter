@@ -6,15 +6,16 @@
 #include <optional>
 
 #include "../SymTab.hpp"
-#include "../ArithExpr.hpp"
+//#include "../ArithExpr.hpp"
 #include "../Token.hpp"
 #include "../Debug.hpp"
 #include "../Descriptor.hpp"
 #include "../DescriptorFunctions.hpp"
-
 class IfStmt;
 class ElifStmt;
 class ElseStmt;
+class ExprNode;
+//class FunctionDefinition;
 
 class Statement {
 
@@ -103,10 +104,10 @@ public:
     virtual void dumpAST(std::string);
 
     void parseTestList(SymTab &symTab);
-    
+
     // void addStatements(std::unique_ptr<GroupedStatements>);
     void addStatements(std::unique_ptr<Statements>);
-    
+
     void addTestList(std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>>);
     void editOptionals(int, std::optional<int>);
 
@@ -126,13 +127,24 @@ public:
     virtual ~FunctionDefinition() = default;
     virtual void evaluate(SymTab &symTab);
     virtual void dumpAST(std::string);
-
 std::vector<std::string> _paramList;
-std::unique_ptr<Statements> _SUITE_NOT_FUNC_SUITE_FIX;
+std::unique_ptr<Statements> funcSuite;
+    int paramSize() { return _paramList.size();}
 
 private:
     std::string _funcName;
     bool _hasBeenAddedToSymTab;
+};
+
+class ReturnStatement : public Statement {
+public:
+    ReturnStatement(std::unique_ptr<ExprNode>);
+    virtual ~ReturnStatement() = default;
+    virtual void evaluate(SymTab &symTab);
+    virtual void dumpAST(std::string);
+private:
+  std::unique_ptr<ExprNode> _returnNode;
+
 };
 
 class FunctionCallStatement : public Statement {
@@ -144,7 +156,7 @@ public:
 private:
     std::unique_ptr<ExprNode> _exprNodeCall;
 };
- 
+
 
 class Comparison {
 
@@ -173,7 +185,7 @@ public:
     virtual bool evaluate(SymTab &symTab);
     virtual void dumpAST(std::string);
 
-private: 
+private:
     std::pair<
         std::unique_ptr<ExprNode>,
         // std::unique_ptr<GroupedStatements>
@@ -193,8 +205,8 @@ public:
 
     virtual bool evaluate(SymTab &symTab);
     virtual void dumpAST(std::string);
- 
-private: 
+
+private:
     std::vector<
         std::pair<
             std::unique_ptr<ExprNode>,

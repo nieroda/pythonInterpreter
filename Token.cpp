@@ -19,7 +19,7 @@ Token::Token():
 
 Token::Token(std::string tok) {
   _keyword = tok;
-} 
+}
 
 void Token::dumpData() const {
   std::cout << "_name: " << _name << std::endl;
@@ -49,6 +49,7 @@ void Token::print() const {
     else if ( isSubtractionOperator() )     std::cout << "-" ;
     else if ( isModuloOperator() )          std::cout << "%" ;
     else if ( isDivisionOperator() )        std::cout << "/" ;
+    else if ( isReturn())                   std::cout << "return";
     else if ( isName() )                    std::cout << getName();
     else if ( isWholeNumber() )             std::cout << getWholeNumber();
     else if ( isFloat() )                   std::cout << getFloat();

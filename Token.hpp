@@ -26,7 +26,7 @@ public:
 
 
 
-    
+
 
     void symbol(char c) { _symbol = c; }
     char symbol() { return _symbol; }
@@ -77,7 +77,7 @@ public:
                isDivisionOperator();
     }
 
-  
+
 
     bool isName() const                   { return _name.length() > 0; }
     std::string getName() const                  { return _name; }
@@ -88,7 +88,7 @@ public:
     }
 
     bool isString() const { return _str.length() > 0; }
-    
+
     std::string getString() const {
       return _str;
     }

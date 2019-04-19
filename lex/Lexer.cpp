@@ -17,7 +17,7 @@ static inline bool isEqualityOperator(char c) { return c == '=' || c == '!' || c
 static inline bool isKeyword(std::string s) {
     return (s == "for" || s == "print" || s == "if" || s == "else" || s == "elif" ||
             s == "def" || s == "and" || s == "or" || s == "while" || s == "not" || s == "in" ||
-            s == "range" || s == "len" || s == "def" );
+            s == "range" || s == "len" || s == "def" || s == "return" );
 }
 
 inline int Lexer::spacesConsumedOnLine() {
@@ -94,11 +94,11 @@ std::string Lexer::readString() {
 
     if (escapeOn == '\0') {
         std::cout << "Fatal Error Lexer::readString.. expected {\",'} got ->" << escapeOn << "<-\n";
-        exit(1); 
+        exit(1);
     }
 
     inStream.get(c);
-    // keep it simple to continue 
+    // keep it simple to continue
     // TODO come back later and deal with escape
     while (c != escapeOn/* && seenEscape == false*/) {
         capture += c;
@@ -109,7 +109,7 @@ std::string Lexer::readString() {
 }
 
 void Lexer::consumeLine() {
-    
+
     char c;
     inStream.get(c);
 
@@ -152,7 +152,7 @@ bool Lexer::consumeLeadingSpaces() {
     inStream.get(c);
 
     while (isspace(c)) {
-        if (c == '\t') 
+        if (c == '\t')
             _numTabs += 1;
         else if (c == ' ') {
             _numSpace += 1;
@@ -279,10 +279,10 @@ auto Lexer::getToken() -> std::shared_ptr<Token> {
             _tokens.emplace(new Token("INDENT"));
 
         } else if (spacesConsumed < peekStack) {
-            // DROP BACK DOWN to new scope @@ smaller 
+            // DROP BACK DOWN to new scope @@ smaller
             while (peekStack != spacesConsumed) {
                 _tokens.emplace(new Token("DEDENT"));
-                
+
                 if (pythonLexSpace.empty()) {
                     std::cout << "Fatal Error in Lex::getToken()..couldn't parse spaces\n";
                     exit(1);
@@ -296,7 +296,7 @@ auto Lexer::getToken() -> std::shared_ptr<Token> {
 
         // If we added tokens to our queue we need to return them.
         if (!_tokens.empty()) {
-            //Take from queue 
+            //Take from queue
             std::shared_ptr<Token> tok = _tokens.front();
 
             //Save to processed tokens
@@ -357,7 +357,7 @@ auto Lexer::getToken() -> std::shared_ptr<Token> {
 
      } else {
          std::cout << "Unknown character in input. ->" << c << "<-\n";
-         exit(1); 
+         exit(1);
      }
 
      _processedTokens.push_back(token);

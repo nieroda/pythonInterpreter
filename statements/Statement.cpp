@@ -21,7 +21,7 @@ AssignStmt::~AssignStmt() {
 }
 
 
-//std::unique_ptr is the C++11 way to express exclusive ownership, 
+//std::unique_ptr is the C++11 way to express exclusive ownership,
 //but one of its most attractive features is that it easily and efficiently converts to a std::shared_ptr.
 void AssignStmt::evaluate(SymTab &symTab) {
 
@@ -124,7 +124,7 @@ void PrintStatement::evaluate(SymTab &symTab) {
 }
 
 void PrintStatement::dumpAST(std::string spaces) {
-    
+
     std::cout << spaces << "AST_PrintStatement " << this << std::endl;
     for_each(_testList->begin(), _testList->end(), [&](auto &&item) {
         item->dumpAST(spaces + '\t');
@@ -165,10 +165,10 @@ void RangeStmt::evaluate(SymTab &symTab) {
     }
 
     end = _end.value(); //THIS IS AN ERR WE MUST HAVE A VALUE FOR END
-    step = _step.value_or(1); 
-      
+    step = _step.value_or(1);
+
     symTab.createEntryFor(_id, start);
- 
+
     if (start > end && step < 0) {
 
         for (; Descriptor::Int::getIntValue(symTab.getValueFor(_id)) > end; Descriptor::Int::incrementByN(step, symTab.getValueFor(_id))) {
@@ -183,7 +183,7 @@ void RangeStmt::evaluate(SymTab &symTab) {
         }
 
     } else if (start == end) {
-        symTab.erase(_id);  
+        symTab.erase(_id);
         return;
     } else {
         std::cout << "Invalid For Loop" << std::endl;
@@ -191,12 +191,12 @@ void RangeStmt::evaluate(SymTab &symTab) {
         exit(1);
     }
 
-    symTab.erase(_id);    
+    symTab.erase(_id);
 
 }
- 
+
 void RangeStmt::dumpAST(std::string space) {
-    
+
     std::cout << space;
     std::cout << std::setw(15) << std::left << "AST_RangeStmt " << this;
     std::cout << std::endl;
@@ -295,6 +295,22 @@ void FunctionDefinition::dumpAST(std::string spaces) {
 
 //END FunctionDefinition
 
+// START RETURN STATEMENT
+ReturnStatement::ReturnStatement(std::unique_ptr<ExprNode> returnNode):
+     _returnNode{std::move(returnNode)}
+{}
+
+void ReturnStatement::evaluate(SymTab &symTab) {
+    _returnNode->evaluate(symTab);
+}
+
+void ReturnStatement::dumpAST(std::string spaces) {
+    std::cout << spaces << "Return Wrapper: " << this << std::endl;
+    _returnNode->dumpAST(spaces + "\t");
+
+}
+//END RETURN STATEMENT
+
 //START FUNCTIONCALL
 FunctionCallStatement::FunctionCallStatement(std::unique_ptr<ExprNode> exprNodeCall):
     _exprNodeCall{std::move(exprNodeCall)}
@@ -329,7 +345,7 @@ void Statements::evaluate(SymTab &symTab) {
     if (debug)
         std::cout << "void Statements::evaluate(SymTab &symTab)" << std::endl;
 
-    for (auto &&s: _statements) {   
+    for (auto &&s: _statements) {
         s->evaluate(symTab);
     }
 }
@@ -391,7 +407,7 @@ void IfStmt::dumpAST(std::string spaces) {
     _if.second->dumpAST(spaces + "\t");
 
 }
-// END "IF" 
+// END "IF"
 
 
 // START "ELIF"
@@ -435,7 +451,7 @@ bool ElifStmt::evaluate(SymTab &symTab) {
 void ElifStmt::dumpAST(std::string spaces) {
     std::cout << spaces << "ElifStmt    ";
     std::cout << this << "\t" << std::endl;
-    for_each(_elif.begin(), _elif.end(), [&spaces](auto &s) { 
+    for_each(_elif.begin(), _elif.end(), [&spaces](auto &s) {
         s.first->dumpAST(spaces + "\t");
         s.second->dumpAST(spaces + "\t");
      });
@@ -443,7 +459,7 @@ void ElifStmt::dumpAST(std::string spaces) {
 // END "ELIF"
 
 
-// START "ELSE" 
+// START "ELSE"
 // ElseStmt::ElseStmt(std::unique_ptr<GroupedStatements> s):
 //     stmts{std::move(s)}
 // {}

@@ -1,3 +1,5 @@
+#ifndef _DESCRIPTOR__FUNCTION__HPP
+#define _DESCRIPTOR__FUNCTION__HPP
 #include "Descriptor.hpp"
 
 // #include <type_traits>
@@ -32,7 +34,7 @@
 
 
 
-// template <class T, typename 
+// template <class T, typename
 //     std::enable_if<std::__and_<std::is_integral<T>::value, std::is_floating_point<T>::value>::type* = nullptr>
 // inline bool compAll(T lhsVar, T rhsVar, const std::shared_ptr<Token> &t) {
 //      if ( t->isRelGT() )
@@ -52,14 +54,14 @@
 //     t->print();
 //     std::cout << std::endl;
 
-//     return false; 
+//     return false;
 // }
 
 
 namespace Compare {
 
     namespace String {
-        // Should use Template /w SFINAE 
+        // Should use Template /w SFINAE
         inline bool compString(std::string lhsVar, std::string rhsVar, const std::shared_ptr<Token> &t) {
 
             if ( t->isRelGT() )
@@ -79,7 +81,7 @@ namespace Compare {
             t->print();
             std::cout << std::endl;
 
-            return false; 
+            return false;
         }
 
     }
@@ -87,7 +89,7 @@ namespace Compare {
 }
 
 
-//Stack overflow is down so i am inlining everything as a quick fix 
+//Stack overflow is down so i am inlining everything as a quick fix
 namespace Descriptor {
 
      namespace Int {
@@ -113,7 +115,7 @@ namespace Descriptor {
             auto desc = std::make_unique<NumberDescriptor>(TypeDescriptor::INTEGER);
             desc->_value.intValue = value;
 
-            return desc; 
+            return desc;
         }
 
         inline void incrementByN(int n, TypeDescriptor *t) {
@@ -244,15 +246,15 @@ namespace Descriptor {
 
 
     inline void printValue(TypeDescriptor *desc) {
-        
+
         NumberDescriptor *nDesc = dynamic_cast<NumberDescriptor *>(desc);
 
         if ( nDesc != nullptr ) {
-            if( nDesc->type() == TypeDescriptor::INTEGER ) 
+            if( nDesc->type() == TypeDescriptor::INTEGER )
                 std::cout << nDesc->_value.intValue;
             else if( nDesc->type() == TypeDescriptor::DOUBLE )
                 std::cout << nDesc->_value.doubleValue;
-            else if( nDesc->type() == TypeDescriptor::BOOL ) 
+            else if( nDesc->type() == TypeDescriptor::BOOL )
                 std::cout << nDesc->_value.boolValue;
             else
                 std::cout << "Misconfigured union type." << std::endl;
@@ -270,7 +272,7 @@ namespace Descriptor {
     }
 
     inline std::unique_ptr<TypeDescriptor> copyReferencePtr(TypeDescriptor *ref) {
-        
+
         if (ref->type() == TypeDescriptor::INTEGER) {
             auto desc = std::make_unique<NumberDescriptor>(TypeDescriptor::INTEGER);
             desc->_value.intValue = dynamic_cast<NumberDescriptor *>(ref)->_value.intValue; //risky
@@ -292,7 +294,7 @@ namespace Descriptor {
         } else if (ref->type() == TypeDescriptor::STRING) {
             auto desc = std::make_unique<StringDescriptor>(TypeDescriptor::STRING);
             desc->_stringValue = dynamic_cast<StringDescriptor *>(ref)->_stringValue;
- 
+
             return desc;
 
         } else {
@@ -303,7 +305,7 @@ namespace Descriptor {
         }
     }
 
-    
+
     inline bool validTypeOp(TypeDescriptor *t1, TypeDescriptor *t2) {
 
         auto lhsType = t1->type();
@@ -336,8 +338,8 @@ namespace Descriptor {
     }
 
     inline std::unique_ptr<TypeDescriptor> andDescriptor(TypeDescriptor *lhs, TypeDescriptor *rhs) {
-        
-        if ( (lhs->type() == TypeDescriptor::BOOL || lhs->type() == TypeDescriptor::INTEGER || lhs->type() == TypeDescriptor::DOUBLE) && 
+
+        if ( (lhs->type() == TypeDescriptor::BOOL || lhs->type() == TypeDescriptor::INTEGER || lhs->type() == TypeDescriptor::DOUBLE) &&
              (rhs->type() == TypeDescriptor::BOOL || rhs->type() == TypeDescriptor::INTEGER || rhs->type() == TypeDescriptor::DOUBLE) ) {
 
             auto lhsPtr = dynamic_cast<NumberDescriptor *>(lhs);
@@ -359,7 +361,7 @@ namespace Descriptor {
 
     inline std::unique_ptr<TypeDescriptor> orDescriptor(TypeDescriptor *lhs, TypeDescriptor *rhs) {
         //Same as and - offset load 2 function later
-        if ( (lhs->type() == TypeDescriptor::BOOL || lhs->type() == TypeDescriptor::INTEGER || lhs->type() == TypeDescriptor::DOUBLE) && 
+        if ( (lhs->type() == TypeDescriptor::BOOL || lhs->type() == TypeDescriptor::INTEGER || lhs->type() == TypeDescriptor::DOUBLE) &&
              (rhs->type() == TypeDescriptor::BOOL || rhs->type() == TypeDescriptor::INTEGER || rhs->type() == TypeDescriptor::DOUBLE) ) {
 
             auto lhsPtr = dynamic_cast<NumberDescriptor *>(lhs);
@@ -385,12 +387,12 @@ namespace Descriptor {
         } else if (ptr->type() == TypeDescriptor::DOUBLE) {
             fill = ptr->_value.doubleValue;
         } else if (ptr->type() == TypeDescriptor::BOOL) {
-            fill = 1.; 
+            fill = 1.;
         }
     }
 
     inline std::unique_ptr<TypeDescriptor> relOperatorDescriptor(TypeDescriptor *lhs, TypeDescriptor *rhs, const std::shared_ptr<Token> &t) {
-        
+
         // Check for string concat
         if ( lhs->type() == TypeDescriptor::STRING && rhs->type() == TypeDescriptor::STRING && t->isAdditionOperator() ) {
 
@@ -421,7 +423,7 @@ namespace Descriptor {
         auto rhsPtr = dynamic_cast<NumberDescriptor*>(rhs);
 
         int lhsVar = lhsPtr->_value.intValue;
-        int rhsVar = rhsPtr->_value.intValue; 
+        int rhsVar = rhsPtr->_value.intValue;
 
         if( t->isAdditionOperator() )
             return Int::createIntDescriptor(lhsVar + rhsVar);
@@ -457,7 +459,7 @@ namespace Descriptor {
             std::string lhsVar = String::getStringValue(lhs);
             std::string rhsVar = String::getStringValue(rhs);
 
-            return Compare::String::compString(lhsVar, rhsVar, t) 
+            return Compare::String::compString(lhsVar, rhsVar, t)
                 ?  Bool::createBooleanDescriptor(true)
                 :  Bool::createBooleanDescriptor(false);
 
@@ -475,11 +477,11 @@ namespace Descriptor {
         double lhsVar;
         grabValueFromNumberDescriptor(lhsVar, lhsPtr);
 
-        double rhsVar; 
+        double rhsVar;
         grabValueFromNumberDescriptor(rhsVar, rhsPtr);
-   
+
         if ( t->isRelGT() )
-            return lhsVar > rhsVar ? Bool::createBooleanDescriptor(true) : Bool::createBooleanDescriptor(false); 
+            return lhsVar > rhsVar ? Bool::createBooleanDescriptor(true) : Bool::createBooleanDescriptor(false);
         else if ( t->isRelLT() )
             return lhsVar < rhsVar ? Bool::createBooleanDescriptor(true) : Bool::createBooleanDescriptor(false);
         else if ( t->isRelGTE() )
@@ -496,4 +498,4 @@ namespace Descriptor {
 };
 
 
-// #endif
+#endif
