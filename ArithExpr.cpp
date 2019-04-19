@@ -325,7 +325,8 @@ void StringExp::dumpAST(std::string space) {
 
 FunctionCall::FunctionCall(std::shared_ptr<Token> functionName, std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> testList):
     ExprNode{functionName},
-   _testList{std::move(testList)}
+   _testList{std::move(testList)},
+   _functionName{functionName->getName()}
     {}
 
 std::unique_ptr<TypeDescriptor> FunctionCall::evaluate(SymTab &symTab) {
