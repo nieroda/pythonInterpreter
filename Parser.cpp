@@ -6,7 +6,7 @@
 Parser::Parser(Lexer &lex):
     lexer{lex}
 {}
-
+ 
 void Parser::die(std::string where, std::string message, std::shared_ptr<Token> token) {
     std::cout << where << " " << message << std::endl;
     token->print();
@@ -14,7 +14,7 @@ void Parser::die(std::string where, std::string message, std::shared_ptr<Token> 
     std::cout << "\nThe following is a list of tokens that have been identified up to this point.\n";
     lexer.printProcessedTokens();
     exit(1);
-}
+} 
 
 std::unique_ptr<Statements> Parser::file_input() {
 
@@ -32,7 +32,7 @@ std::unique_ptr<Statements> Parser::file_input() {
 
         tok = lexer.getToken();
     }
-
+    
     return stmts;
 }
 
@@ -60,7 +60,7 @@ std::unique_ptr<Statement> Parser::stmt() {
 
 
 std::unique_ptr<Statement> Parser::simple_stmt() {
-    // Parse grammar rule
+    // Parse grammar rule 
     // <simple_stmt> -> { print_stmt | assign_stmt | call_stmt | return_stmt } NEWLINE
     // We haven't done -> arrayop
 
@@ -97,10 +97,10 @@ std::unique_ptr<Statement> Parser::simple_stmt() {
             std::unique_ptr<AssignStmt> assignStmt = assign_stmt(cachedToken);
             getEOL(scope);
             return assignStmt;
-        }
+        } 
         else if (tok->isOpenParen()) {
             lexer.ungetToken();
-            std::unique_ptr<FunctionCallStatement> callStmt =
+            std::unique_ptr<FunctionCallStatement> callStmt = 
                 std::make_unique<FunctionCallStatement> (
                     call(cachedToken)
                 );
@@ -147,7 +147,7 @@ std::unique_ptr<PrintStatement> Parser::print_stmt() {
 std::unique_ptr<AssignStmt> Parser::assign_stmt(std::shared_ptr<Token> varName) {
 
     std::string scope = "Parser::assign_stmt";
-
+    
     if (debug)
         std::cout << scope << std::endl;
 
@@ -170,7 +170,7 @@ std::unique_ptr<Statement> Parser::compound_stmt() {
 
     if (debug)
         std::cout << scope << std::endl;
-
+    
     auto tok = lexer.getToken();
 
     if ( tok->isFor() ) {
@@ -192,12 +192,12 @@ std::unique_ptr<Statement> Parser::compound_stmt() {
 
 std::unique_ptr<IfStatement> Parser::if_stmt() {
 
-    // Parses the grammar rule
+    // Parses the grammar rule 
 
     // <if_stmt> -> 'if' <test> ':' suite { 'elif' test ':' suite }* ['else' ':' suite]
 
     std::string scope = "Parser::if_stmt";
-
+    
     if (debug)
         std::cout << scope << std::endl;
 
@@ -352,7 +352,7 @@ std::unique_ptr<Statement> Parser::func_def() {
 
     auto tok = lexer.getToken();
 
-    if ( !tok->isFunc() )
+    if ( !tok->isFunc() ) 
         die(scope, "Expected `def` instead got", tok);
 
     tok = lexer.getToken();
@@ -378,9 +378,11 @@ std::unique_ptr<Statement> Parser::func_def() {
 
     if ( !tok->isColon() )
         die(scope, "Expected `:` instead got", tok);
-    std::unique_ptr<Statements> funcSuite = func_suite();
 
-    return std::make_unique<FunctionDefinition>(funcName, parameterList, std::move(funcSuite), false);
+    std::unique_ptr<Statements> 
+        FIX_AND_WRITE_FUNC_SUITE_THIS_IS_NOT_FUNC_SUITE = suite();
+
+    return std::make_unique<FunctionDefinition>(funcName, parameterList, std::move(FIX_AND_WRITE_FUNC_SUITE_THIS_IS_NOT_FUNC_SUITE), false);
 }
 
 std::vector<std::string> Parser::parameter_list() {
@@ -412,7 +414,7 @@ std::vector<std::string> Parser::parameter_list() {
 
 
 std::unique_ptr<Statements> Parser::suite() {
-    //Parses the grammar rule
+    //Parses the grammar rule 
     // <suite> -> EOL INDENT stmt+ DEDENT
     std::string scope = "Parser::suite";
     std::unique_ptr<Statements> stmts = std::make_unique<Statements>();
@@ -444,67 +446,10 @@ std::unique_ptr<Statements> Parser::suite() {
     return nullptr;
 }
 
-std::unique_ptr<Statements> Parser::func_suite() {
-    //Parses the grammar rule
-    // <func_suite> -> NEWLINE INDENT {stmt | return_stmt} + DEDENT
-    std::string scope = "Parser::func_suit()";
-    if (debug)
-      std::cout << scope << std::endl;
-
-    auto tok = lexer.getToken();  // Parse NEWLINE
-    if (!tok->eol())
-        die(scope, "Expected an EOL token, instead got: ", tok);
-
-    tok = lexer.getToken();      // Parse INDENT TOKEN
-    if (!tok->isIndent())
-        die(scope, "Expected an INDENT token, instead got: ", tok );
-
-    std::unique_ptr<Statements> stmts = std::make_unique<Statements>();
-    tok = lexer.getToken();
-    while (!tok->isDedent()) {
-        if(tok->isReturn()) {
-          lexer.ungetToken();
-          stmts->addStatement(return_stmt());
-          tok = lexer.getToken();
-          break;
-        }
-        lexer.ungetToken();
-        stmts->addStatement(stmt());
-        tok = lexer.getToken();
-    }
-
-    if ( tok->isDedent())
-        return stmts;
-    die(scope, "Expected a DEDENT token, instead got: ", tok);
-    return nullptr;
-}
-
-
-std::unique_ptr<ReturnStatement> Parser::return_stmt() {
-    std::string scope = "Parser::return_stmt";
-    if (debug)
-      std::cout << scope << std::endl;
-
-    auto tok = lexer.getToken();
-    if (!tok->isReturn())
-        die(scope, "Expected a return TOKEN, instead got: ", tok);
-
-    tok = lexer.getToken();  // Check if return returned nothing
-    if (tok->eol())
-        return nullptr;
-    lexer.ungetToken();
-
-    std::unique_ptr<ReturnStatement> testNode = std::make_unique<ReturnStatement>(test());
-    tok = lexer.getToken();
-    if(!tok->eol())
-        die(scope, "Expected a EOL TOKEN, instead got: ", tok);
-    return testNode;
-
-}
 
 std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> Parser::testlist() {
 
-    std::string scope = "Parser::testlist()";
+    std::string scope = "Parser::testlist()"; 
 
     auto p = std::make_unique<std::vector<std::unique_ptr<ExprNode>>>();
 
@@ -551,7 +496,7 @@ std::unique_ptr<ExprNode> Parser::or_test() {
 
     while ( tok->isOr() ) {
         std::unique_ptr<BooleanExprNode> p = std::make_unique<BooleanExprNode>(tok);
-        p->_left = std::move(left);
+        p->_left = std::move(left); 
         p->_right = and_test();
         left = std::move(p);
         tok = lexer.getToken();
@@ -596,7 +541,7 @@ std::unique_ptr<ExprNode> Parser::not_test() {
     std::string scope = "*Parser::not_test()";
 
     if (debug)
-        std::cout << scope << std::endl;
+        std::cout << scope << std::endl;   
 
     auto tok = lexer.getToken();
 
@@ -623,7 +568,7 @@ std::unique_ptr<ExprNode> Parser::comparison() {
 
     std::unique_ptr<ExprNode> left = arith_expr();
     auto tok = lexer.getToken();
-
+    
     while (tok->isCompOp()) {
         std::unique_ptr<ComparisonExprNode> p = std::make_unique<ComparisonExprNode>(tok);
 
@@ -677,11 +622,11 @@ std::unique_ptr<ExprNode> Parser::term() {
 
     if (debug)
         std::cout << scope << std::endl;
-
+    
     std::unique_ptr<ExprNode> left = factor();
-
+    
     auto tok = lexer.getToken();
-
+    
     while ( tok->isMultiplicationOperator() || tok->isDivisionOperator() || tok->isModuloOperator() ) {
         std::unique_ptr<InfixExprNode> p = std::make_unique<InfixExprNode>(tok);
         p->_left = std::move(left);
@@ -753,13 +698,13 @@ std::unique_ptr<ExprNode> Parser::factor() {
                 return call( left->token() );
             } else {
                 lexer.ungetToken();
-            }
+            }           
 
         }
 
         return left;
 
-
+        
     }
     die("Parser::factor", "ERROR", tok);
     return nullptr;
@@ -776,7 +721,7 @@ std::unique_ptr<ExprNode> Parser::atom() {
     std::string scope = "Parser::atom";
 
     if (debug)
-        std::cout << scope << std::endl;
+        std::cout << scope << std::endl;    
 
     auto tok = lexer.getToken();
 
@@ -787,7 +732,7 @@ std::unique_ptr<ExprNode> Parser::atom() {
     else if ( tok->isString() )      // <string> NOT +
         return std::make_unique<StringExp>(tok);
     else if ( tok->isFloat() ) /*Swap to isDouble */
-        return std::make_unique<Double>(tok);
+        return std::make_unique<Double>(tok); 
     else if ( tok->isOpenParen() ) {
         std::unique_ptr<ExprNode> p = test();
         auto token = lexer.getToken();
@@ -799,3 +744,4 @@ std::unique_ptr<ExprNode> Parser::atom() {
 
     return nullptr;
 }
+

@@ -8,7 +8,6 @@
 #include "SymTab.hpp"
 #include "Token.hpp"
 #include "Descriptor.hpp"
-#include "statements/Statement.hpp"
 
 
 // An ExprNode serves as the base class (super class) for arithmetic expression.
@@ -17,7 +16,7 @@
 class ExprNode {
 public:
     ExprNode(std::shared_ptr<Token> token);
-
+    
     virtual ~ExprNode() = 0;
     const std::shared_ptr<Token>& token();
     virtual void dumpAST(std::string) = 0;
@@ -36,13 +35,13 @@ class InfixExprNode: public ExprNode {  // An expression tree node.
 public:
     InfixExprNode(std::shared_ptr<Token> tk);
     ~InfixExprNode();
-
+    
     virtual void dumpAST(std::string);
     virtual void print();
     // virtual TypeDescriptor evaluate(SymTab &);
     virtual std::unique_ptr<TypeDescriptor> evaluate(SymTab &);
 
-public:
+public: 
     std::unique_ptr<ExprNode> _left;
     std::unique_ptr<ExprNode> _right;
 };
@@ -105,7 +104,7 @@ class Variable: public ExprNode {
 public:
     Variable(std::shared_ptr<Token> token);
     ~Variable();
-
+    
     virtual void dumpAST(std::string);
     virtual void print();
     // virtual TypeDescriptor evaluate(SymTab &);
