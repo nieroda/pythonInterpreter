@@ -1,4 +1,5 @@
 #include <iostream>
+#include <tuple>
 #include <iomanip>
 
 #include "ArithExpr.hpp"
@@ -350,14 +351,19 @@ std::unique_ptr<TypeDescriptor> FunctionCall::evaluate(SymTab &symTab) {
     // INCOMPLETE
     // INCOMPLETE
     auto functionPointer = symTab.getFunction(_functionName);
-    int size = functionPointer->paramSize();
-    std::cout << "Got the function pointer\n";
-    if ( functionPointer->_paramList.size() != _testList->size()  ) {
+    int numParams = functionPointer->paramSize();
+    if ( numParams != _testList->size()  ) {
         std::cout << "Error FunctionCall::evaluate -> Caller Args != Calling Args" << std::endl;
     }
-
     symTab.openScope();
+    auto _paramList = functionPointer->_paramList;
 
+    for (int i = 0 ; i < numParams; i ++ ) {
+        auto x = std::move(_testList)[i];
+        //symTab.setValueFor(_paramList[i], x->evaluate(symTab))
+    }
+
+  //  symTab.setValueFor
 
     symTab.closeScope();
     return Descriptor::Int::createIntDescriptor(1);
