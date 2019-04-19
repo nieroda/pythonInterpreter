@@ -26,6 +26,7 @@ public:
     virtual void dumpAST(std::string) = 0;
 };
 
+
 class Statements {
 
 public:
@@ -37,7 +38,9 @@ public:
 
     void dumpAST(std::string);
 
-private:
+    int length() { return _statements.size(); }
+
+public:
     std::vector<std::unique_ptr<Statement>> _statements;
 };
 
@@ -117,15 +120,30 @@ private:
     std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> _testList;
 };
 
-// class FunctionDefinition : public Statement  {
-// public:
-//     Statement();
+class FunctionDefinition : public Statement {
+public:
+    FunctionDefinition(std::string, std::vector<std::string>, std::unique_ptr<Statements>, bool);
+    virtual ~FunctionDefinition() = default;
+    virtual void evaluate(SymTab &symTab);
+    virtual void dumpAST(std::string);
 
-//     virtual ~Statement() = default;
-//     virtual void evaluate(SymTab &symTab) = 0;
-//     virtual void dumpAST(std::string) = 0;
-    
-// };
+std::vector<std::string> _paramList;
+std::unique_ptr<Statements> _SUITE_NOT_FUNC_SUITE_FIX;
+
+private:
+    std::string _funcName;
+    bool _hasBeenAddedToSymTab;
+};
+
+class FunctionCallStatement : public Statement {
+public:
+    FunctionCallStatement(std::unique_ptr<ExprNode>);
+    virtual ~FunctionCallStatement() = default;
+    virtual void evaluate(SymTab &symTab);
+    virtual void dumpAST(std::string);
+private:
+    std::unique_ptr<ExprNode> _exprNodeCall;
+};
  
 
 class Comparison {

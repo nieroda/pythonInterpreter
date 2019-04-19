@@ -1,48 +1,50 @@
-#ifndef __FUNCTION_MAP_HPP
-#define __FUNCTION_MAP_HPP
-#include <map>
-#include <string>
-// #include "FunctionDefinition.hpp"
+// #ifndef __FUNCTION_MAP_HPP
+// #define __FUNCTION_MAP_HPP
+// #include <map>
+// #include <string>
+// // #include "FunctionDefinition.hpp"
 
-class FunctionDefinition {
-    FunctionDefinition() {}
-};
+// #include "./statements/Statement.hpp"
 
-class FunctionMap {
-public:
-    FunctionMap() = default;
-    ~FunctionMap() = default;
+// // class FunctionDefinition {
+// //     FunctionDefinition() {}
+// // };
 
-    void addFunction(std::string varName, std::shared_ptr<FunctionDefinition> func) {
-        _table[varName] = func;
-    }
+// class FunctionMap {
+// public:
+//     FunctionMap() = default;
+//     ~FunctionMap() = default;
 
-    std::shared_ptr<FunctionDefinition> getFunction(std::string varName) {
-        return _table[varName];
-    }
+//     void addFunction(std::string varName, std::shared_ptr<FunctionDefinition> func) {
+//         _table[varName] = func;
+//     }
 
-    bool isDefined(std::string vName) {
-        //Do later
-        return _table.find(vName) != _table.end();
-;
-    }
+//     std::shared_ptr<FunctionDefinition> getFunction(std::string varName) {
+//         return _table[varName];
+//     }
 
-    void dumpAST(std::string tab) {
+//     bool isDefined(std::string vName) {
+//         //Do later
+//         return _table.find(vName) != _table.end();
+// ;
+//     }
 
-        std::cout << "FuncDEFN START" << std::endl;
+//     void dumpAST(std::string tab) {
 
-        // for (auto &item: _table) {
-        //     item.second->dumpAST(tab);
-        //     std::cout << "\n\n";
-        // }
+//         std::cout << "FuncDEFN START" << std::endl;
 
-        std::cout << "FuncDEF END\n\n" << std::endl;
+//         // for (auto &item: _table) {
+//         //     item.second->dumpAST(tab);
+//         //     std::cout << "\n\n";
+//         // }
 
-    }
+//         std::cout << "FuncDEF END\n\n" << std::endl;
+
+//     }
 
 
 
-private:
-    std::map<std::string, std::shared_ptr<FunctionDefinition>> _table;
-};
-#endif
+// private:
+//     std::map<std::string, std::shared_ptr<FunctionDefinition>> _table;
+// };
+// #endif

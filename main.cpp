@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     // std::unique_ptr<GroupedStatements> stmts =  parser.file_input();
     auto stmts = parser.file_input();
 
-    // stmts->evaluate(symTab);
+    stmts->evaluate(symTab);
     // std::cout << "Evaluate Done - Dumping Tree" << std::endl;
 //    std::cout << getMemoryUsage() << std::endl;
    stmts->dumpAST("");
