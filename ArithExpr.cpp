@@ -26,10 +26,10 @@ const std::shared_ptr<Token>& ExprNode::token() { return _token; }
 
 
 // InfixExprNode START
-InfixExprNode::InfixExprNode(std::shared_ptr<Token> tk) :
-    ExprNode{tk},
-    _left(nullptr),
-    _right(nullptr)
+InfixExprNode::InfixExprNode(std::shared_ptr<Token> tk) : 
+    ExprNode{tk}, 
+    _left(nullptr), 
+    _right(nullptr) 
 {}
 
 InfixExprNode::~InfixExprNode() {
@@ -49,14 +49,14 @@ void InfixExprNode::dumpAST(std::string space) {
 
 std::unique_ptr<TypeDescriptor> InfixExprNode::evaluate(SymTab &symTab) {
     // Evaluates an infix expression using a post-order traversal of the expression tree.
-
+    
     // add later/
     if ( token()->isSubtractionOperator() && _right == nullptr ) {
 
         auto lValue = _left->evaluate(symTab);
 
         if (lValue->type() == TypeDescriptor::INTEGER) {
-
+            
             Descriptor::Int::flipSignBit(lValue.get());
             return std::move(lValue);
 
@@ -70,13 +70,13 @@ std::unique_ptr<TypeDescriptor> InfixExprNode::evaluate(SymTab &symTab) {
             exit(1);
         }
     }
-
+    
     auto lValue = _left->evaluate(symTab);
     auto rValue = _right->evaluate(symTab);
 
     if (debug)
         std::cout << "InfixExprNode::evaluate: " << lValue->type() << " " << token()->symbol() << " " << rValue->type() << std::endl;
-
+     
     checkTypeCompatibility("InfixExprNode::evaluate()", lValue.get(), rValue.get());
 
    return Descriptor::relOperatorDescriptor(lValue.get(), rValue.get(), token());
@@ -120,7 +120,7 @@ std::unique_ptr<TypeDescriptor> ComparisonExprNode::evaluate(SymTab &symTab) {
 }
 
 void ComparisonExprNode::dumpAST(std::string space) {
-
+    
     std::cout << space << std::setw(15) << std::left << "ComparisonExprNode " << this << "\tToken";
     token()->print();
     std::cout << std::endl;
@@ -130,10 +130,10 @@ void ComparisonExprNode::dumpAST(std::string space) {
 // ComparisonExprNode END
 
 // BooleanExprNode START
-BooleanExprNode::BooleanExprNode(std::shared_ptr<Token> tk):
-    ExprNode{tk},
-    _left{nullptr},
-    _right{nullptr}
+BooleanExprNode::BooleanExprNode(std::shared_ptr<Token> tk): 
+    ExprNode{tk}, 
+    _left{nullptr}, 
+    _right{nullptr} 
 {}
 
 BooleanExprNode::~BooleanExprNode() {
@@ -154,7 +154,7 @@ std::unique_ptr<TypeDescriptor> BooleanExprNode::evaluate(SymTab &symTab) {
 
         auto result = _left->evaluate(symTab);
         return Descriptor::negateDescriptor(result.get());
-
+    
     } else if ( token()->isAnd() ) {
 
         if (!_left || !_right) {
@@ -192,7 +192,7 @@ std::unique_ptr<TypeDescriptor> BooleanExprNode::evaluate(SymTab &symTab) {
 }
 
 void BooleanExprNode::dumpAST(std::string space) {
-
+    
     std::cout << space << std::setw(15) << std::left << "BooleanExprNode " << this << "\tToken: ";
     token()->print();
     std::cout << std::endl;
@@ -200,8 +200,8 @@ void BooleanExprNode::dumpAST(std::string space) {
 //BooleanExprNode END
 
 // WholeNumber START
-WholeNumber::WholeNumber(std::shared_ptr<Token> token):
-    ExprNode{token}
+WholeNumber::WholeNumber(std::shared_ptr<Token> token): 
+    ExprNode{token} 
 {}
 
 WholeNumber::~WholeNumber() {
@@ -215,9 +215,9 @@ void WholeNumber::print() {
 
 std::unique_ptr<TypeDescriptor> WholeNumber::evaluate(SymTab &symTab) {
 
-    if (debug)
+    if (debug) 
         std::cout << "WholeNumber::evaluate: returning " << token()->getWholeNumber() << std::endl;
-
+     
     return Descriptor::Int::createIntDescriptor( token()->getWholeNumber() );
 }
 
@@ -246,7 +246,7 @@ void Double::print() {
 }
 
 std::unique_ptr<TypeDescriptor> Double::evaluate(SymTab &symTab [[maybe_unused]]) {
-
+    
     if (debug)
         std::cout << "Double::evaluate: returning " << token()->getFloat() << std::endl;
 
@@ -261,8 +261,8 @@ void Double::dumpAST(std::string space) {
 // Double END
 
 // Variable START
-Variable::Variable(std::shared_ptr<Token> token):
-    ExprNode{token}
+Variable::Variable(std::shared_ptr<Token> token): 
+    ExprNode{token} 
 {}
 
 Variable::~Variable() {
@@ -286,7 +286,7 @@ std::unique_ptr<TypeDescriptor> Variable::evaluate(SymTab &symTab) {
 }
 
 void Variable::dumpAST(std::string space) {
-
+    
     std::cout << space << std::setw(15) << std::left << "Variable " << this << "\tToken: " ;
     token()->print();
     std::cout << std::endl;
@@ -295,8 +295,8 @@ void Variable::dumpAST(std::string space) {
 // Variable END
 
 // StringExp START
-StringExp::StringExp(std::shared_ptr<Token> token):
-    ExprNode{token}
+StringExp::StringExp(std::shared_ptr<Token> token): 
+    ExprNode{token} 
 {}
 
 StringExp::~StringExp() {
@@ -313,7 +313,7 @@ std::unique_ptr<TypeDescriptor> StringExp::evaluate(SymTab &symTab) {
 }
 
 void StringExp::dumpAST(std::string space) {
-
+    
     std::cout << space << std::setw(15) << std::left << "StringExp " << this << "\tToken: " ;
     token()->print();
     std::cout << std::endl;
@@ -325,8 +325,7 @@ void StringExp::dumpAST(std::string space) {
 
 FunctionCall::FunctionCall(std::shared_ptr<Token> functionName, std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> testList):
     ExprNode{functionName},
-   _testList{std::move(testList)},
-   _functionName{functionName->getName()}
+   _testList{std::move(testList)}
     {}
 
 std::unique_ptr<TypeDescriptor> FunctionCall::evaluate(SymTab &symTab) {
@@ -349,14 +348,14 @@ std::unique_ptr<TypeDescriptor> FunctionCall::evaluate(SymTab &symTab) {
     // INCOMPLETE
     // INCOMPLETE
     // INCOMPLETE
+
     auto functionPointer = symTab.getFunction(_functionName);
-    int size = functionPointer->paramSize();
-    std::cout << "Got the function pointer\n";
-    if ( functionPointer->_paramList.size() != _testList->size()  ) {
+
+    if ( functionPointer->_SUITE_NOT_FUNC_SUITE_FIX->length() != _testList->size()  ) {
         std::cout << "Error FunctionCall::evaluate -> Caller Args != Calling Args" << std::endl;
     }
 
-    symTab.openScope();
+    sumTab.openScope();
 
 
     symTab.closeScope();

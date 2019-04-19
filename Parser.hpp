@@ -1,5 +1,3 @@
-//std::unique_ptr<Statements> func_suite();
-//td::unique_ptr<ReturnStatement> return_stmt();
 
 #ifndef __PARSER_HPP
 #define __PARSER_HPP
@@ -11,14 +9,14 @@
 #include "lex/Lexer.hpp"
 #include "ArithExpr.hpp"
 // #include "FunctionMap.hpp"
-class Parser {
+class Parser { 
     public:
 
         Parser(Lexer &);
 
         void die(
-            std::string,
-            std::string,
+            std::string, 
+            std::string, 
             std::shared_ptr<Token>
         );
 
@@ -31,7 +29,7 @@ class Parser {
         std::unique_ptr<Statement> simple_stmt();
 
         std::unique_ptr<AssignStmt> assign_stmt(std::shared_ptr<Token>);
-
+        
         std::unique_ptr<Statement> compound_stmt();
 
         std::unique_ptr<PrintStatement> print_stmt();
@@ -43,8 +41,6 @@ class Parser {
         std::vector<std::string> parameter_list();
 
         std::unique_ptr<Statements> suite();
-        std::unique_ptr<Statements> func_suite();
-        std::unique_ptr<ReturnStatement> return_stmt();
 
         std::unique_ptr<std::vector<std::unique_ptr<ExprNode>>> testlist();
 
@@ -55,9 +51,9 @@ class Parser {
         std::unique_ptr<ExprNode> not_test();
         std::unique_ptr<ExprNode> comparison();
         std::unique_ptr<ExprNode> arith_expr();
-
+        
         std::unique_ptr<ExprNode> term();
-
+        
         std::unique_ptr<ExprNode> factor();
 
         std::unique_ptr<ExprNode> call(std::shared_ptr<Token>);
